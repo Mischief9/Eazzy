@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.10.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Eazzy.Domain\Eazzy.Domain.csproj" />
+    <ProjectReference Include="..\Eazzy.Infrastructure\Eazzy.Infrastructure.csproj" />
+    <ProjectReference Include="..\Eazzy.Shared\Eazzy.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

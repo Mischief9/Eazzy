@@ -1,0 +1,9 @@
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Shared\bin\Debug\netcoreapp3.1\Eazzy.Shared.deps.json
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Shared\bin\Debug\netcoreapp3.1\Eazzy.Shared.dll
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Shared\bin\Debug\netcoreapp3.1\Eazzy.Shared.pdb
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Shared\obj\Debug\netcoreapp3.1\Eazzy.Shared.csprojAssemblyReference.cache
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Shared\obj\Debug\netcoreapp3.1\Eazzy.Shared.AssemblyInfoInputs.cache
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Shared\obj\Debug\netcoreapp3.1\Eazzy.Shared.AssemblyInfo.cs
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Shared\obj\Debug\netcoreapp3.1\Eazzy.Shared.csproj.CoreCompileInputs.cache
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Shared\obj\Debug\netcoreapp3.1\Eazzy.Shared.dll
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Shared\obj\Debug\netcoreapp3.1\Eazzy.Shared.pdb

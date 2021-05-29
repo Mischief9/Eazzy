@@ -1,0 +1,17 @@
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\bin\Debug\netcoreapp3.1\Eazzy.Domain.dll
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\obj\Debug\netcoreapp3.1\Eazzy.Infrastructure.csprojAssemblyReference.cache
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\obj\Debug\netcoreapp3.1\Eazzy.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\obj\Debug\netcoreapp3.1\Eazzy.Infrastructure.AssemblyInfo.cs
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\bin\Debug\netcoreapp3.1\Eazzy.Infrastructure.deps.json
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\bin\Debug\netcoreapp3.1\Eazzy.Infrastructure.runtimeconfig.json
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\bin\Debug\netcoreapp3.1\Eazzy.Infrastructure.runtimeconfig.dev.json
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\bin\Debug\netcoreapp3.1\Eazzy.Infrastructure.dll
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\bin\Debug\netcoreapp3.1\Eazzy.Infrastructure.pdb
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\bin\Debug\netcoreapp3.1\Eazzy.Domain.pdb
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\obj\Debug\netcoreapp3.1\Eazzy.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\obj\Debug\netcoreapp3.1\Eazzy.Infrastructure.csproj.CopyComplete
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\obj\Debug\netcoreapp3.1\Eazzy.Infrastructure.dll
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\obj\Debug\netcoreapp3.1\Eazzy.Infrastructure.pdb
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\obj\Debug\netcoreapp3.1\Eazzy.Infrastructure.genruntimeconfig.cache
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\bin\Debug\netcoreapp3.1\Eazzy.Shared.dll
+C:\Users\datoq\source\repos\Eazzy\Eazzy.Infrastructure\bin\Debug\netcoreapp3.1\Eazzy.Shared.pdb
