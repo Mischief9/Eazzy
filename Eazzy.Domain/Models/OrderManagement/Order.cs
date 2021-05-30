@@ -19,6 +19,8 @@ namespace Eazzy.Domain.Models.OrderManagement
 
         public virtual Customer Customer { get; set; }
 
+        public int TableId { get; set; }
+
         public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 }

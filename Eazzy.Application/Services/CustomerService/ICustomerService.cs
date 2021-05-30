@@ -17,5 +17,7 @@ namespace Eazzy.Application.Services.CustomerService
         void UpdateCustomer(Customer customer);
 
         void DeleteCustomer(Customer customer);
+
+        Customer FindByUserName(string username);
     }
 }

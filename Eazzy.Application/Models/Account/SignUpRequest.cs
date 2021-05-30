@@ -18,5 +18,7 @@ namespace Eazzy.Application.Models.Account
         public string PhoneNumber { get; set; }
 
         public string Password { get; set; }
+
+        public int? TenantId { get; set; }
     }
 }

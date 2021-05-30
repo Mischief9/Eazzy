@@ -48,6 +48,7 @@ namespace Eazzy.Application.Services.AccountService
             {
                 UserName = signUp.UserName,
                 Email = signUp.Email,
+                TenantId = signUp.TenantId,
                 Customer = customer
             };
 

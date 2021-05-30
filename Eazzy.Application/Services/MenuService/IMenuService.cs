@@ -21,5 +21,15 @@ namespace Eazzy.Application.Services.MenuService
         void DeleteMenu(Menu menu);
 
         IPagedList<Menu> GetMenus(GetMenuRequest request);
+
+        MenuItem GetMenuItemById(int id);
+
+        void InsertMenuItem(MenuItem menuItem);
+
+        void InsertMenuItem(IEnumerable<MenuItem> menuItems);
+
+        void UpdateMenuItem(MenuItem menuItem);
+
+        void DeleteMenuItem(MenuItem menuItem);
     }
 }

@@ -48,6 +48,16 @@ namespace Eazzy.Infrastructure.Repository.Abstract
             _db.SaveChanges();
         }
 
+        public void Delete(IEnumerable<TEntity> entities)
+        {
+            if (entities == null)
+                throw new ArgumentNullException(nameof(entities));
+
+            _db.Set<TEntity>().RemoveRange(entities);
+
+            _db.SaveChanges();
+        }
+
         public TEntity Find(int id)
         {
             var entity = _db.Set<TEntity>().Find(id);

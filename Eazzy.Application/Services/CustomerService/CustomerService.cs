@@ -1,8 +1,10 @@
 ﻿using Eazzy.Domain.Models.CustomerManagement;
 using Eazzy.Infrastructure.Repository.Interfaces;
 using Eazzy.Shared.DomainCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,6 +56,14 @@ namespace Eazzy.Application.Services.CustomerService
                 throw new ArgumentNullException();
 
             _customerRepository.Delete(customer);
+        }
+
+        public Customer FindByUserName(string username)
+        {
+            if (string.IsNullOrEmpty(username))
+                throw new ArgumentNullException(username);
+
+            return _customerRepository.Table.Include("User").SingleOrDefault(x => x.User.UserName == username);
         }
     }
 }

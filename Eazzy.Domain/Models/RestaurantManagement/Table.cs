@@ -6,6 +6,8 @@ namespace Eazzy.Domain.Models.RestaurantManagement
 {
     public class Table : Entity, IHasTenant
     {   
+        public string TableNumber { get; set; }
+
         public bool IsFree { get; set; }
 
         public int TenantId { get; set; }

@@ -17,5 +17,7 @@ namespace Eazzy.Infrastructure.Repository.Interfaces
         void Update(TEntity entity);
 
         void Delete(TEntity entity);
+
+        void Delete(IEnumerable<TEntity> entities);
     }
 }
