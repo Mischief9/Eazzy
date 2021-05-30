@@ -1,4 +1,5 @@
 ﻿using Eazzy.Domain.Models.AccountManagement;
+using Eazzy.Domain.Models.CartManagement;
 using Eazzy.Shared.DomainCore;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace Eazzy.Domain.Models.CustomerManagement
         public int UserId { get; set; }
 
         public virtual User User { get; set; }
+
+        public virtual ICollection<ShoppingCartItem> ShoppingCartItems { get; set; }
 
         public string GetFullName() => $"{FirstName} {LastName}";
     }
