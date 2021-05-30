@@ -1,5 +1,10 @@
 ﻿using Eazzy.Application.Models.Order;
+using Eazzy.Application.Services.RestaurantService;
+using Eazzy.Domain.Models.CustomerManagement;
 using Eazzy.Domain.Models.OrderManagement;
+using Eazzy.Domain.Models.OrderManagement.Enums;
+using Eazzy.Domain.Models.TenantManagement;
+using Eazzy.Domain.Models.TenantManagement.Enums;
 using Eazzy.Infrastructure.Repository.Interfaces;
 using Eazzy.Shared.DomainCore;
 using System;
@@ -12,11 +17,16 @@ namespace Eazzy.Application.Services.OrderService
 {
     public class OrderService : IOrderService
     {
+        private readonly IRestaurantService _restaurantService;
         private readonly IRepository<Order> _orderRepository;
-
-        public OrderService(IRepository<Order> orderRepository)
+        private readonly IRepository<Tenant> _tenantRepository;
+        public OrderService(IRepository<Order> orderRepository,
+            IRepository<Tenant> tenantRepository,
+            IRestaurantService restaurantService)
         {
             _orderRepository = orderRepository;
+            _tenantRepository = tenantRepository;
+            _restaurantService = restaurantService;
         }
 
         public Order FindById(int id)
@@ -69,6 +79,54 @@ namespace Eazzy.Application.Services.OrderService
             });
 
             return new PagedList<GetOrdersResponse>(response, request.PageIndex, request.PageSize);
+        }
+
+        public Order PlaceOrder(Customer customer, int tenantId, int tableId)
+        {
+            if (customer.ShoppingCartItems == null)
+                throw new ArgumentNullException(nameof(customer.ShoppingCartItems));
+
+            var shoppingCartItems = customer.ShoppingCartItems.ToList();
+            var restaurant = _tenantRepository.Find(tenantId);
+            var orderTotal = shoppingCartItems.Sum(x => x.Price);
+            var tax = decimal.Zero;
+
+            switch (restaurant.TaxType)
+            {
+                case TaxType.AMOUNT:
+                    tax = orderTotal + restaurant.TaxAmount.Value;
+                    break;
+                case TaxType.PERCENTAGE:
+                    tax = orderTotal * restaurant.TaxPercentage.Value / 100;
+                    break;
+            }
+
+            orderTotal += tax;
+
+            var orderItems = shoppingCartItems.Select(x => new OrderItem()
+            {
+                MenuItemId = x.MenuItemId,
+                Price = x.Price
+            }).ToList();
+
+            var order = new Order()
+            {
+                CreatedOnUtc = DateTime.UtcNow,
+                CustomerId = customer.Id,
+                OrderItems = orderItems,
+                TaxService = tax,
+                OrderTotalWithoutTax = orderTotal - tax,
+                OrderTotal = orderTotal,
+                TableId = tableId,
+                OrderStatus = OrderStatus.Pending
+            };
+
+            _orderRepository.Add(order);
+            _restaurantService.SetTableLocked(tableId);
+
+            /// TODO: Payment Here..
+
+            return order;
         }
     }
 }

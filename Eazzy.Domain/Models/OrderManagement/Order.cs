@@ -1,4 +1,5 @@
 ﻿using Eazzy.Domain.Models.CustomerManagement;
+using Eazzy.Domain.Models.OrderManagement.Enums;
 using Eazzy.Shared.DomainCore;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,7 @@ namespace Eazzy.Domain.Models.OrderManagement
         public int TableId { get; set; }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
+
+        public OrderStatus OrderStatus { get; set; }
     }
 }

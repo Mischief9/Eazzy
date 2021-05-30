@@ -26,7 +26,10 @@ namespace Eazzy.DI
         public void Resolve(IServiceCollection services)
         {
             services.AddDbContext<EazzyDbContext>(
-                options => options.UseSqlServer(_configuration.GetConnectionString("EazzyDbContext")));
+                options =>
+                {
+                    options.UseSqlServer(_configuration.GetConnectionString("EazzyDbContext"));
+                });
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 

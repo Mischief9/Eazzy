@@ -2,7 +2,9 @@
 using Eazzy.Domain.Models.CustomerManagement;
 using Eazzy.Domain.Models.MenuManagement;
 using Eazzy.Infrastructure.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Eazzy.Application.Services.ShoppingCartService
@@ -14,6 +16,17 @@ namespace Eazzy.Application.Services.ShoppingCartService
         public ShoppingCartService(IRepository<ShoppingCartItem> shoppingCartItemRepository)
         {
             _shoppingCartItemRepository = shoppingCartItemRepository;
+        }
+
+        public List<ShoppingCartItem> GetShoppingCartItems(int customerId)
+        {
+            var shoppingCartItems = _shoppingCartItemRepository.Table
+                .Where(x => x.CustomerId == customerId)
+                .Include(x=>x.MenuItem)
+                    .ThenInclude(x=>x.Menu)
+                .ToList();
+
+            return shoppingCartItems;
         }
 
         public void AddToCart(MenuItem item, Customer customer)

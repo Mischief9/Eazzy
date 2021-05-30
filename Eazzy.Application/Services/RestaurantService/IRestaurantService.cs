@@ -14,6 +14,8 @@ namespace Eazzy.Application.Services.RestaurantService
     {
         IPagedList<Tenant> GetAllRestaurant(GetRestaurantFilter filter);
 
+        Tenant FindById(int id);
+
         void SetTableFree(int id);
 
         Task CreateNewRestaurant(Tenant tenant, SignUpRequest signUpRequest);
@@ -27,5 +29,9 @@ namespace Eazzy.Application.Services.RestaurantService
         void UpdateTable(Table table);
 
         void DeleteTable(Table table);
+
+        void SetTableLocked(int id);
+
+        decimal GetRestaurantOrderTotalAndTax(int id, decimal total, out decimal tax);
     }
 }

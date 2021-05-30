@@ -63,7 +63,10 @@ namespace Eazzy.Application.Services.CustomerService
             if (string.IsNullOrEmpty(username))
                 throw new ArgumentNullException(username);
 
-            return _customerRepository.Table.Include("User").SingleOrDefault(x => x.User.UserName == username);
+            return _customerRepository.Table
+                .Include(x=>x.User)
+                .Include(x=>x.ShoppingCartItems)
+                .SingleOrDefault(x => x.User.UserName == username);
         }
     }
 }

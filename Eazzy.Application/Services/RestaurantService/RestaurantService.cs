@@ -3,6 +3,7 @@ using Eazzy.Application.Models.Restaurant;
 using Eazzy.Application.Services.AccountService;
 using Eazzy.Domain.Models.RestaurantManagement;
 using Eazzy.Domain.Models.TenantManagement;
+using Eazzy.Domain.Models.TenantManagement.Enums;
 using Eazzy.Infrastructure.Repository.Interfaces;
 using Eazzy.Shared.DomainCore;
 using System;
@@ -38,6 +39,15 @@ namespace Eazzy.Application.Services.RestaurantService
             }
 
             return new PagedList<Tenant>(tenants, filter.PageIndex, filter.PageSize);
+        }
+
+        public void SetTableLocked(int id)
+        {
+            var table = _tableRepository.Find(id);
+
+            table.IsFree = false;
+
+            _tableRepository.Update(table);
         }
 
         public void SetTableFree(int id)
@@ -102,6 +112,36 @@ namespace Eazzy.Application.Services.RestaurantService
                 throw new ArgumentNullException(nameof(table));
 
             _tableRepository.Delete(table);
+        }
+
+        public Tenant FindById(int id)
+        {
+            var restaurant = _tenantRepository.Find(id);
+
+            return restaurant;
+        }
+
+        public decimal GetRestaurantOrderTotalAndTax(int id, decimal total, out decimal tax)
+        {
+            var restaurant = _tenantRepository.Find(id);
+
+            switch (restaurant.TaxType)
+            {
+                case TaxType.AMOUNT:
+                    total += restaurant.TaxAmount.Value;
+                    tax = restaurant.TaxAmount.Value;
+                    break;
+                case TaxType.PERCENTAGE:
+                    var temp = total;
+                    total += total * restaurant.TaxAmount.Value / 100;
+                    tax = temp - total;
+                    break;
+                default:
+                    tax = 0;
+                    break;
+            }
+
+            return total;
         }
     }
 }
