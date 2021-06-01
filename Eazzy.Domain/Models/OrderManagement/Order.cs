@@ -25,5 +25,7 @@ namespace Eazzy.Domain.Models.OrderManagement
         public virtual ICollection<OrderItem> OrderItems { get; set; }
 
         public OrderStatus OrderStatus { get; set; }
+
+        public int TenantId { get; set; }
     }
 }

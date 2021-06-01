@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eazzy.Models.Menu
 {
-    public class AddMenuItemModel
+    public class AddOrUpdateMenuItemModel
     {
         public string Name { get; set; }
 

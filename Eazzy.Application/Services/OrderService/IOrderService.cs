@@ -24,5 +24,7 @@ namespace Eazzy.Application.Services.OrderService
         Order PlaceOrder(Customer customer, int tenantId, int tableId);
 
         IPagedList<GetOrdersResponse> GetOrders(GetOrdersRequest request);
+
+        IPagedList<GetOrdersResponse> GetCustomerOrders(GetOrdersRequest request);
     }
 }

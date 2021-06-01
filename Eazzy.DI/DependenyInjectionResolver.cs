@@ -28,6 +28,7 @@ namespace Eazzy.DI
             services.AddDbContext<EazzyDbContext>(
                 options =>
                 {
+                    options.UseLazyLoadingProxies();
                     options.UseSqlServer(_configuration.GetConnectionString("EazzyDbContext"));
                 });
 

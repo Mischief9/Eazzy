@@ -1,5 +1,6 @@
 ﻿using Eazzy.Application.Models.Order;
 using Eazzy.Application.Services.RestaurantService;
+using Eazzy.Application.Services.ShoppingCartService;
 using Eazzy.Domain.Models.CustomerManagement;
 using Eazzy.Domain.Models.OrderManagement;
 using Eazzy.Domain.Models.OrderManagement.Enums;
@@ -18,15 +19,18 @@ namespace Eazzy.Application.Services.OrderService
     public class OrderService : IOrderService
     {
         private readonly IRestaurantService _restaurantService;
+        private readonly IShoppingCartService _shoppingCartService;
         private readonly IRepository<Order> _orderRepository;
         private readonly IRepository<Tenant> _tenantRepository;
         public OrderService(IRepository<Order> orderRepository,
             IRepository<Tenant> tenantRepository,
-            IRestaurantService restaurantService)
+            IRestaurantService restaurantService,
+            IShoppingCartService shoppingCartService)
         {
             _orderRepository = orderRepository;
             _tenantRepository = tenantRepository;
             _restaurantService = restaurantService;
+            _shoppingCartService = shoppingCartService;
         }
 
         public Order FindById(int id)
@@ -71,12 +75,23 @@ namespace Eazzy.Application.Services.OrderService
         public IPagedList<GetOrdersResponse> GetOrders(GetOrdersRequest request)
         {
             var orders = _orderRepository.Table.AsQueryable();
-            var response = orders.Select(x => new GetOrdersResponse()
-            {
-                OrderTotal = x.OrderTotal,
-                TaxService = x.TaxService,
-                CustomerName = x.Customer.GetFullName(),
-            });
+
+            var response = orders
+                .Where(x => x.TenantId == request.TenantId)
+                .Select(x => new GetOrdersResponse()
+                {
+                    CustomerId = x.CustomerId,
+                    OrderTotal = x.OrderTotal,
+                    TaxService = x.TaxService,
+                    CustomerName = x.Customer.GetFullName(),
+                    Items = x.OrderItems.Select(x => new GetOrderItem()
+                    {
+                        MenuItemId = x.MenuItemId,
+                        OrderId = x.OrderId,
+                        Price = x.Price,
+                        Name = x.MenuItem.Name
+                    }).ToList()
+                });
 
             return new PagedList<GetOrdersResponse>(response, request.PageIndex, request.PageSize);
         }
@@ -118,7 +133,8 @@ namespace Eazzy.Application.Services.OrderService
                 OrderTotalWithoutTax = orderTotal - tax,
                 OrderTotal = orderTotal,
                 TableId = tableId,
-                OrderStatus = OrderStatus.Pending
+                OrderStatus = OrderStatus.Pending,
+                TenantId = tenantId
             };
 
             _orderRepository.Add(order);
@@ -126,7 +142,33 @@ namespace Eazzy.Application.Services.OrderService
 
             /// TODO: Payment Here..
 
+            _shoppingCartService.ClearCart(customer.Id);
+
             return order;
+        }
+
+        public IPagedList<GetOrdersResponse> GetCustomerOrders(GetOrdersRequest request)
+        {
+            var orders = _orderRepository.Table.AsQueryable();
+
+            var response = orders
+                .Where(x => x.CustomerId == request.CustomerId)
+                .Select(x => new GetOrdersResponse()
+                {
+                    CustomerId = x.CustomerId,
+                    OrderTotal = x.OrderTotal,
+                    TaxService = x.TaxService,
+                    CustomerName = x.Customer.GetFullName(),
+                    Items = x.OrderItems.Select(x => new GetOrderItem()
+                    {
+                        MenuItemId = x.MenuItemId,
+                        OrderId = x.OrderId,
+                        Price = x.Price,
+                        Name = x.MenuItem.Name
+                    }).ToList()
+                });
+
+            return new PagedList<GetOrdersResponse>(response, request.PageIndex, request.PageSize);
         }
     }
 }

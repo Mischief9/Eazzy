@@ -143,5 +143,20 @@ namespace Eazzy.Application.Services.RestaurantService
 
             return total;
         }
+
+        public void UpdateTenant(Tenant tenant)
+        {
+            if (tenant == null)
+                throw new ArgumentNullException(nameof(tenant));
+
+            _tenantRepository.Update(tenant);
+        }
+
+        public Table FindTableById(int id)
+        {
+            var table = _tableRepository.Find(id);
+
+            return table;
+        }
     }
 }

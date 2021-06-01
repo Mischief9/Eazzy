@@ -6,6 +6,7 @@ using Eazzy.Domain.Models.CartManagement;
 using Eazzy.Infrastructure;
 using Eazzy.Models.Cart;
 using Eazzy.Shared.DomainCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -71,15 +72,17 @@ namespace Eazzy.V1.Controllers
             return Ok(cartDetails);
         }
 
-        [HttpPost("add")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
-        public IActionResult AddItemToCart([FromQuery] int menuItemId)
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
+        // [Authorize]
+        public IActionResult AddItemToCart([FromBody] AddOrDeleteItemToCartModel model)
         {
             var username = User.Identity.Name;
             var customer = _customerService.FindByUserName(username);
 
-            var menuItem = _menuService.GetMenuItemById(menuItemId);
+            var menuItem = _menuService.GetMenuItemById(model.MenuItemId);
 
             if (menuItem == null)
             {
@@ -88,12 +91,34 @@ namespace Eazzy.V1.Controllers
 
             _shoppingCartService.AddToCart(menuItem, customer);
 
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
+        // [Authorize]
+        public IActionResult RemoveItemFromCart([FromRoute] int id)
+        {
+            var customer = GetCurrentCustomer();
+
+            var shoppingCartItem = _shoppingCartService.GetByMenuItemIdAndCustomer(id, customer.Id);
+
+            if (shoppingCartItem == null)
+            {
+                return Fail(HttpStatusCode.NotFound, "Item in the cart wasn't found.");
+            }
+
+            _shoppingCartService.RemoveFromCart(shoppingCartItem);
+
             return NoContent();
         }
 
-        [HttpPost("clear")]
+        [HttpDelete("clear")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        // [Authorize]
         public IActionResult ClearCart()
         {
             var username = User.Identity.Name;

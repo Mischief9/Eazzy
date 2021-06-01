@@ -5,10 +5,8 @@ using Eazzy.Infrastructure;
 using Eazzy.Shared.DomainCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Eazzy.Application.Models.Order;
+using System.Net;
 
 namespace Eazzy.V1.Controllers
 {
@@ -16,22 +14,45 @@ namespace Eazzy.V1.Controllers
     public class OrderController : WebApiController
     {
         private readonly IOrderService _orderService;
-        private readonly ICustomerService _customerService;
 
-        public OrderController(IOrderService orderService,
-            ICustomerService customerService)
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
-            _customerService = customerService;
         }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(PagedList<GetOrdersResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
+        public IActionResult GetOrders([FromQuery] SortAndPaged sortAndPaged)
+        {
+            var customer = GetCurrentCustomer();
+            var tenantId = customer.User.TenantId;
+
+            if (!tenantId.HasValue)
+            {
+                return Fail(HttpStatusCode.NotFound, "Tenant wasn't found.");
+            }
+
+            var model = _orderService.GetOrders(new GetOrdersRequest()
+            {
+                TenantId = tenantId.Value,
+                PageIndex = sortAndPaged.PageIndex,
+                PageSize = sortAndPaged.PageSize,
+                Sort= sortAndPaged.Sort,
+                SortBy = sortAndPaged.SortBy
+            });
+
+            return Ok(model);
+        }
+
 
         [HttpPost]
         [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
-        public IActionResult PlaceOrder([FromQuery] int tenantId, [FromQuery]int tableId)
+        public IActionResult PlaceOrder([FromQuery] int tenantId, [FromQuery] int tableId)
         {
-            var username = User.Identity.Name;
-            var customer = _customerService.FindByUserName(username);
+            var customer = GetCurrentCustomer();
 
             var placedOrder = _orderService.PlaceOrder(customer, tenantId, tableId);
             return Ok(placedOrder);

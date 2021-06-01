@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Eazzy.Models.Menu
+namespace Eazzy.Models.Cart
 {
-    public class AddMenuModel
+    public class AddOrDeleteItemToCartModel
     {
-        public string Name { get; set; }
+        public int MenuItemId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Eazzy.Infrastructure.TypeConfigurations.AccountConfigurations;
+﻿using Eazzy.Domain.Models.TenantManagement;
+using Eazzy.Infrastructure.TypeConfigurations.AccountConfigurations;
 using Eazzy.Infrastructure.TypeConfigurations.CustomerConfigurations;
 using Eazzy.Infrastructure.TypeConfigurations.MenuConfiguration;
 using Eazzy.Infrastructure.TypeConfigurations.OrderConfiguration;
@@ -18,6 +19,8 @@ namespace Eazzy.Infrastructure.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Tenant>().HasQueryFilter(x => !x.IsDeleted);
+
             modelBuilder.ApplyConfiguration(new UserTypeConfiguration());
             modelBuilder.ApplyConfiguration(new UserClaimTypeConfiguration());
             modelBuilder.ApplyConfiguration(new UserTokenTypeConfiguration());

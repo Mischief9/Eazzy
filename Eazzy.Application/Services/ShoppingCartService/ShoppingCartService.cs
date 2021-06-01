@@ -22,11 +22,27 @@ namespace Eazzy.Application.Services.ShoppingCartService
         {
             var shoppingCartItems = _shoppingCartItemRepository.Table
                 .Where(x => x.CustomerId == customerId)
-                .Include(x=>x.MenuItem)
-                    .ThenInclude(x=>x.Menu)
+                .Include(x => x.MenuItem)
+                    .ThenInclude(x => x.Menu)
                 .ToList();
 
             return shoppingCartItems;
+        }
+
+        public ShoppingCartItem GetByMenuItemIdAndCustomer(int menuItemId, int customerId)
+        {
+            var shoppingCartItem = _shoppingCartItemRepository.Table
+               .Where(x => x.MenuItemId == menuItemId && x.CustomerId == customerId)
+               .FirstOrDefault();
+
+            return shoppingCartItem;
+        }
+
+        public ShoppingCartItem FindById(int id)
+        {
+            var shoppingCartItem = _shoppingCartItemRepository.Find(id);
+
+            return shoppingCartItem;
         }
 
         public void AddToCart(MenuItem item, Customer customer)
@@ -52,6 +68,14 @@ namespace Eazzy.Application.Services.ShoppingCartService
             var items = _shoppingCartItemRepository.Table.Where(x => x.CustomerId == customerId);
 
             _shoppingCartItemRepository.Delete(items);
+        }
+
+        public void RemoveFromCart(ShoppingCartItem shoppingCartItem)
+        {
+            if (shoppingCartItem == null)
+                throw new ArgumentNullException(nameof(shoppingCartItem));
+
+            _shoppingCartItemRepository.Delete(shoppingCartItem);
         }
     }
 }

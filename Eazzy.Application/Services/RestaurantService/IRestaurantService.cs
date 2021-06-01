@@ -16,11 +16,15 @@ namespace Eazzy.Application.Services.RestaurantService
 
         Tenant FindById(int id);
 
+        void UpdateTenant(Tenant tenant);
+
         void SetTableFree(int id);
 
         Task CreateNewRestaurant(Tenant tenant, SignUpRequest signUpRequest);
 
         IPagedList<Table> GetTables(int tenantId, bool? freeTable, int pageIndex = 1, int pageSize = 10);
+
+        Table FindTableById(int id);
 
         void InsertTable(Table table);
 
