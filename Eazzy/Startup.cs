@@ -1,6 +1,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Eazzy.DI;
 using Eazzy.Domain.Models.AccountManagement;
+using Eazzy.Domain.Models.CustomerManagement;
 using Eazzy.Infrastructure.Models;
 using Eazzy.Shared.DomainCore;
 using Microsoft.AspNetCore.Authentication;
@@ -183,6 +184,7 @@ namespace Eazzy
             });
 
             Migrate(app);
+            Seed(app);
         }
 
         private void Migrate(IApplicationBuilder app)
@@ -190,6 +192,73 @@ namespace Eazzy
             using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
             var context = serviceScope.ServiceProvider.GetService<EazzyDbContext>();
             context.Database.Migrate();
+        }
+
+        private void Seed(IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            var context = serviceScope.ServiceProvider.GetService<EazzyDbContext>();
+            var userManager = serviceScope.ServiceProvider.GetService<UserManager<User>>();
+
+            // add administrator role if doesnt exist.
+            var administratorRoles = context.Set<Role>().Where(x => x.Name == "Administrator").ToList();
+
+            if (!administratorRoles.Any())
+            {
+                var newRole = new Role()
+                {
+                    Name = "Administrator",
+                    NormalizedName = "Administrator"
+                };
+
+                context.Set<Role>().Add(newRole);
+
+                context.SaveChanges();
+            }
+
+            // add system administrator role if doesnt exist.
+            var sysAdministratorRoles = context.Set<Role>().Where(x => x.Name == "System Administrator").ToList();
+
+            if (!sysAdministratorRoles.Any())
+            {
+                var newRole = new Role()
+                {
+                    Name = "System Administrator",
+                    NormalizedName = "System Administrator"
+                };
+
+                context.Set<Role>().Add(newRole);
+
+                context.SaveChanges();
+            }
+
+            // add system administrator user.
+            var newUser =  userManager.CreateAsync(new User()
+            {
+                Email = "admin@eazzy.ge",
+                UserName = "SysAdmin",
+                Customer = new Customer()
+                {
+                    FirstName = "admin",
+                    LastName = "admin",
+                    PhoneNumber = "555123456789"
+                }
+            },
+            "123456").Result;
+
+            // add system administrator and user relationship.
+            var sysAdministrator = context.Set<Role>().First(x => x.Name == "System Administrator");
+            var sysUser = context.Set<User>().First(x => x.UserName == "SysAdmin");
+            
+            var sysAdminUserRole = new UserRole()
+            {
+                RoleId = sysAdministrator.Id,
+                UserId = sysUser.Id
+            };
+
+            context.Set<UserRole>().Add(sysAdminUserRole);
+
+            context.SaveChanges();
         }
     }
 }

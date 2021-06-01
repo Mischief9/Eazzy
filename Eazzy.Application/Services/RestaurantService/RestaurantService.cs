@@ -67,7 +67,7 @@ namespace Eazzy.Application.Services.RestaurantService
             _tenantRepository.Add(tenant);
 
             signUpRequest.TenantId = tenant.Id;
-            await _accountService.Register(signUpRequest);
+            await _accountService.Register(signUpRequest, true);
         }
 
         public IPagedList<Table> GetTables(int tenantId, bool? freeTable, int pageIndex = 1, int pageSize = 10)

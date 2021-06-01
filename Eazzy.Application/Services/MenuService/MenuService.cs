@@ -55,11 +55,11 @@ namespace Eazzy.Application.Services.MenuService
 
         public IPagedList<Menu> GetMenus(GetMenuRequest request)
         {
-            var menus = _menuRepository.Table.Include(x => x.MenuItems);
+            var menus = _menuRepository.Table.AsQueryable();
 
             if (request.TenantId.HasValue)
             {
-                menus.Where(x => x.TenantId == request.TenantId.Value);
+                menus = menus.Where(x => x.TenantId == request.TenantId.Value);
             }
 
             return new PagedList<Menu>(menus, request.PageIndex, request.PageSize);

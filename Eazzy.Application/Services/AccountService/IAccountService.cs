@@ -10,7 +10,7 @@ namespace Eazzy.Application.Services.AccountService
 {
     public interface IAccountService
     {
-        Task<ResultSuccess> Register(SignUpRequest signUp);
+        Task<ResultSuccess> Register(SignUpRequest signUp, bool isAdministrator = false);
 
         Task<LoginCredentialsResponse> Login(LoginRequest login);
     }

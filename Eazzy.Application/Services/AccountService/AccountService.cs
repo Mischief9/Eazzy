@@ -35,7 +35,7 @@ namespace Eazzy.Application.Services.AccountService
             _db = db;
         }
 
-        public async Task<ResultSuccess> Register(SignUpRequest signUp)
+        public async Task<ResultSuccess> Register(SignUpRequest signUp, bool isAdministrator = false)
         {
             var customer = new Customer()
             {
@@ -52,10 +52,26 @@ namespace Eazzy.Application.Services.AccountService
                 Customer = customer
             };
 
+
             var result = await _userManager.CreateAsync(user, signUp.Password);
+
 
             if (result.Succeeded)
             {
+                if (isAdministrator)
+                {
+                    var administratorRole = _db.Set<Role>().First(x => x.Name == "Administrator");
+                    var newUser = _db.Set<User>().First(x => x.UserName == signUp.UserName);
+
+                    var userRole = new UserRole()
+                    {
+                        RoleId = administratorRole.Id,
+                        UserId = newUser.Id
+                    };
+
+                    _db.Set<UserRole>().Add(userRole);
+                }
+
                 return new ResultSuccess { Success = true };
             }
 
