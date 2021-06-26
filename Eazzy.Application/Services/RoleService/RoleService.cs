@@ -61,10 +61,7 @@ namespace Eazzy.Application.Services.RoleService
         {
             var userRole = _db.Set<UserRole>().FirstOrDefault(x=>x.UserId == userId);
 
-            if(userRole == null)
-                throw new ArgumentNullException(nameof(userRole));
-
-            return userRole.Role;
+            return userRole?.Role;
         }
     }
 }
