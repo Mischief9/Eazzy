@@ -163,6 +163,8 @@ namespace Eazzy
                 app.UseExceptionHandler();
             }
 
+            app.UseRouting();
+
             app.UseCors(MyAllowSpecificOrigins);
 
             app.UseSwagger();
@@ -173,8 +175,6 @@ namespace Eazzy
             });
 
             app.UseHttpsRedirection();
-
-            app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
