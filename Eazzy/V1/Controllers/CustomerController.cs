@@ -1,6 +1,7 @@
 ﻿using Eazzy.Application.Models.Order;
 using Eazzy.Application.Services.CustomerService;
 using Eazzy.Application.Services.OrderService;
+using Eazzy.Application.Services.RoleService;
 using Eazzy.Domain.Models.CustomerManagement;
 using Eazzy.Infrastructure;
 using Eazzy.Models.Customers;
@@ -21,28 +22,43 @@ namespace Eazzy.V1.Controllers
     {
         private readonly ICustomerService _customerService;
         private readonly IOrderService _orderService;
+        private readonly IRoleService _roleService;
 
         public CustomerController(ICustomerService customerService,
-            IOrderService orderService)
+            IOrderService orderService,
+            IRoleService roleService)
         {
             _customerService = customerService;
             _orderService = orderService;
+            _roleService = roleService;
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Customer), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CustomerModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
         public IActionResult GetCustomer()
         {
             var customer = GetCurrentCustomer();
+            var role = _roleService.FindByUserId(customer.User.Id);
 
-            if(customer == null)
+            if (customer == null)
             {
                 return Fail(HttpStatusCode.NotFound, "Customer wasn't found.");
             }
 
-            return Ok(customer);
+            var customerModel = new CustomerModel()
+            {
+                Id = customer.Id,
+                UserId = customer.User.Id,
+                ShoppingCartItems = customer.ShoppingCartItems.ToList(),
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                PhoneNumber = customer.PhoneNumber,
+                Role = role
+            };
+
+            return Ok(customerModel);
         }
 
         [HttpPatch]

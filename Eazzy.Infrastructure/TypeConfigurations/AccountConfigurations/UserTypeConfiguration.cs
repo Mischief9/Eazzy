@@ -18,7 +18,7 @@ namespace Eazzy.Infrastructure.TypeConfigurations.AccountConfigurations
 
             builder.HasOne(x => x.Customer)
                 .WithOne(x => x.User)
-                .HasForeignKey<Customer>(x=>x.UserId);
+                .HasForeignKey<Customer>(x => x.UserId);
         }
     }
 

@@ -5,6 +5,7 @@ using System.Text;
 using Eazzy.Domain.Models.AccountManagement;
 using System.Threading.Tasks;
 using Eazzy.Infrastructure.Models;
+using System.Linq;
 
 namespace Eazzy.Application.Services.RoleService
 {
@@ -54,6 +55,16 @@ namespace Eazzy.Application.Services.RoleService
                 throw new ArgumentNullException();
 
             _db.Set<Role>().Remove(role);
+        }
+
+        public Role FindByUserId(int userId)
+        {
+            var userRole = _db.Set<UserRole>().FirstOrDefault(x=>x.UserId == userId);
+
+            if(userRole == null)
+                throw new ArgumentNullException(nameof(userRole));
+
+            return userRole.Role;
         }
     }
 }

@@ -17,5 +17,7 @@ namespace Eazzy.Application.Services.RoleService
         void UpdateRole(Role role);
 
         void DeleteRole(Role role);
+
+        Role FindByUserId(int userId);
     }
 }
