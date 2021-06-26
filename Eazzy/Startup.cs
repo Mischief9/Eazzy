@@ -52,7 +52,8 @@ namespace Eazzy
             {
                 options.AddPolicy(MyAllowSpecificOrigins, builder =>
                 {
-                    builder.WithOrigins(Configuration["Cors:AcceptableDomain"])
+                    var acceptableDomains = new string[] { Configuration["Cors:AcceptableDomain"] };
+                    builder.WithOrigins(acceptableDomains)
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .Build();
