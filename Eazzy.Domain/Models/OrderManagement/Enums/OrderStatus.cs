@@ -10,6 +10,7 @@ namespace Eazzy.Domain.Models.OrderManagement.Enums
     {
         Pending = 1 << 0,
         Failed = 1 << 1,
-        Success = 1 << 2
+        Success = 1 << 2,
+        Rejected = 1 << 3
     }
 }

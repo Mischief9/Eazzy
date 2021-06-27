@@ -1,6 +1,7 @@
 ﻿using Eazzy.Application.Models.Order;
 using Eazzy.Domain.Models.CustomerManagement;
 using Eazzy.Domain.Models.OrderManagement;
+using Eazzy.Domain.Models.OrderManagement.Enums;
 using Eazzy.Shared.DomainCore;
 using System;
 using System.Collections.Generic;
@@ -26,5 +27,7 @@ namespace Eazzy.Application.Services.OrderService
         IPagedList<GetOrdersResponse> GetOrders(GetOrdersRequest request);
 
         IPagedList<GetOrdersResponse> GetCustomerOrders(GetOrdersRequest request);
+
+        void ChangeOrderStatus(OrderStatus status, Order order);
     }
 }

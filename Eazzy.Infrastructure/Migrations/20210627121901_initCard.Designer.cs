@@ -4,14 +4,16 @@ using Eazzy.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Eazzy.Infrastructure.Migrations
 {
     [DbContext(typeof(EazzyDbContext))]
-    partial class EazzyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210627121901_initCard")]
+    partial class initCard
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,6 +133,9 @@ namespace Eazzy.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
 
                     b.HasIndex("TenantId");
 
@@ -285,7 +290,8 @@ namespace Eazzy.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
 
                     b.ToTable("Cards");
                 });
@@ -296,6 +302,9 @@ namespace Eazzy.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CardId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
@@ -310,9 +319,6 @@ namespace Eazzy.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Customers");
                 });
@@ -354,7 +360,7 @@ namespace Eazzy.Infrastructure.Migrations
                     b.Property<int>("MenuId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MenuItemTypeId")
+                    b.Property<int>("MenuItemType")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -367,24 +373,7 @@ namespace Eazzy.Infrastructure.Migrations
 
                     b.HasIndex("MenuId");
 
-                    b.HasIndex("MenuItemTypeId");
-
                     b.ToTable("MenuItems");
-                });
-
-            modelBuilder.Entity("Eazzy.Domain.Models.MenuManagement.MenuItemType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MenuItemType");
                 });
 
             modelBuilder.Entity("Eazzy.Domain.Models.OrderManagement.Order", b =>
@@ -529,6 +518,12 @@ namespace Eazzy.Infrastructure.Migrations
 
             modelBuilder.Entity("Eazzy.Domain.Models.AccountManagement.User", b =>
                 {
+                    b.HasOne("Eazzy.Domain.Models.CustomerManagement.Customer", "Customer")
+                        .WithOne("User")
+                        .HasForeignKey("Eazzy.Domain.Models.AccountManagement.User", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Eazzy.Domain.Models.TenantManagement.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId");
@@ -576,17 +571,8 @@ namespace Eazzy.Infrastructure.Migrations
             modelBuilder.Entity("Eazzy.Domain.Models.CustomerManagement.Card", b =>
                 {
                     b.HasOne("Eazzy.Domain.Models.CustomerManagement.Customer", "Customer")
-                        .WithMany("Card")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Eazzy.Domain.Models.CustomerManagement.Customer", b =>
-                {
-                    b.HasOne("Eazzy.Domain.Models.AccountManagement.User", "User")
-                        .WithOne("Customer")
-                        .HasForeignKey("Eazzy.Domain.Models.CustomerManagement.Customer", "UserId")
+                        .WithOne("Card")
+                        .HasForeignKey("Eazzy.Domain.Models.CustomerManagement.Card", "CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -596,12 +582,6 @@ namespace Eazzy.Infrastructure.Migrations
                     b.HasOne("Eazzy.Domain.Models.MenuManagement.Menu", "Menu")
                         .WithMany("MenuItems")
                         .HasForeignKey("MenuId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Eazzy.Domain.Models.MenuManagement.MenuItemType", "MenuItemType")
-                        .WithMany()
-                        .HasForeignKey("MenuItemTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

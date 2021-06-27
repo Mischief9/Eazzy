@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20210414215141_initCreate.Designer.cs" />
     <Compile Remove="Migrations\20210420165912_roleRoleClaims.cs" />
     <Compile Remove="Migrations\20210420165912_roleRoleClaims.Designer.cs" />
+    <Compile Remove="Migrations\20210627121458_initCard.cs" />
+    <Compile Remove="Migrations\20210627121458_initCard.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -21,6 +21,8 @@ namespace Eazzy.Domain.Models.CustomerManagement
 
         public virtual ICollection<ShoppingCartItem> ShoppingCartItems { get; set; }
 
+        public virtual ICollection<Card> Card { get; set; }
+
         public string GetFullName() => $"{FirstName} {LastName}";
     }
 }

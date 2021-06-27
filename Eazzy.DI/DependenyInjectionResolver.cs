@@ -11,6 +11,7 @@ using Eazzy.Application.Services.OrderService;
 using Eazzy.Application.Services.MenuService;
 using Eazzy.Application.Services.ShoppingCartService;
 using Eazzy.Application.Services.RestaurantService;
+using Eazzy.Application.Services.CardService;
 
 namespace Eazzy.DI
 {
@@ -41,6 +42,7 @@ namespace Eazzy.DI
             services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<IRestaurantService, RestaurantService>();
+            services.AddScoped<ICardService, CardService>();
         }
     }
 }

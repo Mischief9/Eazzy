@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 namespace Eazzy.Domain.Models.TenantManagement
 {
+    /// TODO : Merchant SecretKey for payment.
     public class Tenant : Entity
     {
         public string Name { get; set; }

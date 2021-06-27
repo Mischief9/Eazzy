@@ -12,7 +12,7 @@ namespace Eazzy.Models.Menu
 
         public string Description { get; set; }
 
-        public MenuItemType MenuItemType { get; set; }
+        public int MenuItemTypeId { get; set; }
 
         public decimal Price { get; set; }
 

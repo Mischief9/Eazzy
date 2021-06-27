@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Eazzy.Application.Models.Order;
 using System.Net;
+using Eazzy.Models.Order;
 
 namespace Eazzy.V1.Controllers
 {
@@ -39,7 +40,7 @@ namespace Eazzy.V1.Controllers
                 TenantId = tenantId.Value,
                 PageIndex = sortAndPaged.PageIndex,
                 PageSize = sortAndPaged.PageSize,
-                Sort= sortAndPaged.Sort,
+                Sort = sortAndPaged.Sort,
                 SortBy = sortAndPaged.SortBy
             });
 
@@ -56,6 +57,24 @@ namespace Eazzy.V1.Controllers
 
             var placedOrder = _orderService.PlaceOrder(customer, tenantId, tableId);
             return Ok(placedOrder);
+        }
+
+        [HttpPost("callback")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        public IActionResult CallBackOrderStatus([FromBody] OrderCallBackModel model)
+        {
+            var order = _orderService.FindById(model.OrderId);
+
+            if (order == null)
+            {
+                return Fail(HttpStatusCode.NotFound, "Order wasn't found.");
+            }
+
+            var status = model.GetStatus();
+            _orderService.ChangeOrderStatus(status, order);
+
+            return NoContent();
         }
     }
 }

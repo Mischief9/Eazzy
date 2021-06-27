@@ -15,12 +15,15 @@ namespace Eazzy.Application.Services.MenuService
     {
         private readonly IRepository<Menu> _menuRepository;
         private readonly IRepository<MenuItem> _menuItemRepository;
+        private readonly IRepository<MenuItemType> _menuItemTypeRepository;
 
         public MenuService(IRepository<Menu> menuRepository,
-            IRepository<MenuItem> menuItemRepository)
+            IRepository<MenuItem> menuItemRepository,
+            IRepository<MenuItemType> menuItemTypeRepository)
         {
             _menuRepository = menuRepository;
             _menuItemRepository = menuItemRepository;
+            _menuItemTypeRepository = menuItemTypeRepository;
         }
 
         public void DeleteMenu(Menu menu)
@@ -111,6 +114,58 @@ namespace Eazzy.Application.Services.MenuService
                 throw new ArgumentNullException(nameof(menuItem));
 
             _menuItemRepository.Update(menuItem);
+        }
+
+        public IPagedList<MenuItemType> GetMenuItemTypes(GetMenuItemTypesRequest request)
+        {
+            var menuItemTypes = _menuItemTypeRepository.Table;
+
+            if (!string.IsNullOrEmpty(request.Name))
+            {
+                menuItemTypes = menuItemTypes.Where(x => x.Name.Contains(request.Name));
+            }
+
+            return new PagedList<MenuItemType>(menuItemTypes, request.PageIndex, request.PageSize);
+        }
+
+        public MenuItemType GetMenuItemTypeById(int id)
+        {
+            var menuItemType = _menuItemTypeRepository.Find(id);
+
+            return menuItemType;
+        }
+
+        public void InsertMenuItemType(MenuItemType menuItemType)
+        {
+            if (menuItemType == null)
+                throw new ArgumentNullException(nameof(menuItemType));
+
+            _menuItemTypeRepository.Add(menuItemType);
+
+        }
+
+        public void InsertMenuItemType(IEnumerable<MenuItemType> menuItemTypes)
+        {
+            if (menuItemTypes == null)
+                throw new ArgumentNullException(nameof(menuItemTypes));
+
+            _menuItemTypeRepository.Add(menuItemTypes);
+        }
+
+        public void UpdateMenuItemType(MenuItemType menuItemType)
+        {
+            if (menuItemType == null)
+                throw new ArgumentNullException(nameof(menuItemType));
+
+            _menuItemTypeRepository.Update(menuItemType);
+        }
+
+        public void DeleteMenuItemType(MenuItemType menuItemType)
+        {
+            if (menuItemType == null)
+                throw new ArgumentNullException(nameof(menuItemType));
+
+            _menuItemTypeRepository.Delete(menuItemType);
         }
     }
 }

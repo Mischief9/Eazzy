@@ -4,14 +4,16 @@ using Eazzy.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Eazzy.Infrastructure.Migrations
 {
     [DbContext(typeof(EazzyDbContext))]
-    partial class EazzyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210627125049_cardAndMenuType")]
+    partial class cardAndMenuType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,6 +133,9 @@ namespace Eazzy.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
 
                     b.HasIndex("TenantId");
 
@@ -310,9 +315,6 @@ namespace Eazzy.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Customers");
                 });
@@ -529,6 +531,12 @@ namespace Eazzy.Infrastructure.Migrations
 
             modelBuilder.Entity("Eazzy.Domain.Models.AccountManagement.User", b =>
                 {
+                    b.HasOne("Eazzy.Domain.Models.CustomerManagement.Customer", "Customer")
+                        .WithOne("User")
+                        .HasForeignKey("Eazzy.Domain.Models.AccountManagement.User", "CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Eazzy.Domain.Models.TenantManagement.Tenant", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId");
@@ -578,15 +586,6 @@ namespace Eazzy.Infrastructure.Migrations
                     b.HasOne("Eazzy.Domain.Models.CustomerManagement.Customer", "Customer")
                         .WithMany("Card")
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Eazzy.Domain.Models.CustomerManagement.Customer", b =>
-                {
-                    b.HasOne("Eazzy.Domain.Models.AccountManagement.User", "User")
-                        .WithOne("Customer")
-                        .HasForeignKey("Eazzy.Domain.Models.CustomerManagement.Customer", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

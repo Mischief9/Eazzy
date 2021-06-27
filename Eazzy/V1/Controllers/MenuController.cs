@@ -73,7 +73,7 @@ namespace Eazzy.V1.Controllers
         {
             var menu = _menuService.FindById(id);
 
-            if(menu == null)
+            if (menu == null)
             {
                 return Fail(HttpStatusCode.NotFound, "Menu wasn't found.");
             }
@@ -86,7 +86,7 @@ namespace Eazzy.V1.Controllers
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
         // [Authorize(Roles = "Administrator")]
-        public IActionResult ChangeMenu([FromRoute] int id,[FromBody] AddOrUpdateMenuModel model)
+        public IActionResult ChangeMenu([FromRoute] int id, [FromBody] AddOrUpdateMenuModel model)
         {
             var menu = _menuService.FindById(id);
 
@@ -110,7 +110,7 @@ namespace Eazzy.V1.Controllers
         {
             var menu = _menuService.FindById(id);
 
-            if(menu == null)
+            if (menu == null)
             {
                 return Fail(HttpStatusCode.NotFound, "Menu wasn't found.");
             }
@@ -121,14 +121,14 @@ namespace Eazzy.V1.Controllers
         }
 
         [HttpGet("menuitem/{menuItemId}")]
-        [ProducesResponseType(typeof(MenuItem),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(MenuItem), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
-        public IActionResult GetMenuItem([FromRoute]int menuItemId)
+        public IActionResult GetMenuItem([FromRoute] int menuItemId)
         {
             var menuItem = _menuService.GetMenuItemById(menuItemId);
 
-            if(menuItem == null)
+            if (menuItem == null)
             {
                 return Fail(HttpStatusCode.NotFound, "Menu item wasn't found.");
             }
@@ -146,7 +146,7 @@ namespace Eazzy.V1.Controllers
             {
                 Name = model.Name,
                 Description = model.Description,
-                MenuItemType = model.MenuItemType,
+                MenuItemTypeId = model.MenuItemTypeId,
                 Price = model.Price,
                 MenuId = model.MenuId
             };
@@ -157,7 +157,7 @@ namespace Eazzy.V1.Controllers
         }
 
         [HttpPatch("menuitem/{menuItemId}")]
-        [ProducesResponseType(typeof(MenuItem),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(MenuItem), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
         // [Authorize(Roles = "Administrator")]
@@ -165,14 +165,14 @@ namespace Eazzy.V1.Controllers
         {
             var menuItem = _menuService.GetMenuItemById(menuItemId);
 
-            if(menuItem == null)
+            if (menuItem == null)
             {
                 return Fail(HttpStatusCode.NotFound, "Menu item wasn't found.");
             }
 
             menuItem.Name = model.Name;
             menuItem.Description = model.Description;
-            menuItem.MenuItemType = model.MenuItemType;
+            menuItem.MenuItemTypeId = model.MenuItemTypeId;
             menuItem.Price = model.Price;
 
             _menuService.UpdateMenuItem(menuItem);
@@ -195,6 +195,98 @@ namespace Eazzy.V1.Controllers
             }
 
             _menuService.DeleteMenuItem(menuItem);
+
+            return NoContent();
+        }
+
+        [HttpGet("menuitemtypes")]
+        [ProducesResponseType(typeof(PagedList<MenuItemType>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
+        public IActionResult GetMenuItemTypes([FromQuery] GetMenuItemTypesModel model)
+        {
+            var request = new GetMenuItemTypesRequest()
+            {
+                Name = model.Name,
+                Sort = model.Sort,
+                SortBy = model.SortBy,
+                PageSize = model.PageSize,
+                PageIndex = model.PageIndex
+            };
+
+            var menuItemTypes = _menuService.GetMenuItemTypes(request);
+
+            return Ok(menuItemTypes);
+        }
+
+        [HttpGet("menuitemtype/{menuItemTypeId}")]
+        [ProducesResponseType(typeof(MenuItemType), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
+        public IActionResult GetMenuItemType([FromRoute] int menuItemTypeId)
+        {
+            var menuItemType = _menuService.GetMenuItemTypeById(menuItemTypeId);
+
+            if (menuItemType == null)
+            {
+                return Fail(HttpStatusCode.NotFound, "Menu Item Type item wasn't found.");
+            }
+
+            return Ok(menuItemType);
+        }
+
+        [HttpPost("menuitemtype")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        // [Authorize(Roles = "Administrator")]
+        public IActionResult AddMenuItemType([FromBody] AddOrUpdateMenuItemType model)
+        {
+            var menuItemType = new MenuItemType()
+            {
+                Name = model.Name
+            };
+
+            _menuService.InsertMenuItemType(menuItemType);
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
+        [HttpPatch("menuitemtype/{menuItemTypeId}")]
+        [ProducesResponseType(typeof(MenuItemType), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
+        // [Authorize(Roles = "Administrator")]
+        public IActionResult ChangeMenuItemType([FromRoute] int menuItemTypeId, [FromBody] AddOrUpdateMenuItemModel model)
+        {
+            var menuItemType = _menuService.GetMenuItemTypeById(menuItemTypeId);
+
+            if (menuItemType == null)
+            {
+                return Fail(HttpStatusCode.NotFound, "Menu item wasn't found.");
+            }
+
+            menuItemType.Name = model.Name;
+
+            _menuService.UpdateMenuItemType(menuItemType);
+
+            return Ok(menuItemType);
+        }
+
+        [HttpDelete("menuitemtype/{menuItemId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
+        // [Authorize(Roles = "Administrator")]
+        public IActionResult DeleteMenuItemType([FromRoute] int menuItemTypeId)
+        {
+            var menuItemType = _menuService.GetMenuItemTypeById(menuItemTypeId);
+
+            if (menuItemType == null)
+            {
+                return Fail(HttpStatusCode.NotFound, "Menu item wasn't found.");
+            }
+
+            _menuService.DeleteMenuItemType(menuItemType);
 
             return NoContent();
         }

@@ -15,11 +15,6 @@ namespace Eazzy.Infrastructure.TypeConfigurations.CustomerConfigurations
             builder.ToTable("Customers");
 
             builder.HasKey(x => x.Id);
-
-
-            builder.HasOne(x => x.User)
-                .WithOne(x => x.Customer)
-                .HasForeignKey<User>(x => x.CustomerId);
         }
     }
 }

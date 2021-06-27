@@ -14,7 +14,7 @@ namespace Eazzy.Infrastructure.Models
         public EazzyDbContext(DbContextOptions options)
             : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -29,6 +29,7 @@ namespace Eazzy.Infrastructure.Models
             modelBuilder.ApplyConfiguration(new RoleTypeConfiguration());
             modelBuilder.ApplyConfiguration(new RoleClaimTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CustomerTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new CardTypeConfiguration());
             modelBuilder.ApplyConfiguration(new MenuTypeConfiguration());
             modelBuilder.ApplyConfiguration(new MenuItemTypeConfiguration());
             modelBuilder.ApplyConfiguration(new OrderTypeConfiguration());

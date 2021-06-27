@@ -140,11 +140,19 @@ namespace Eazzy.Application.Services.OrderService
             _orderRepository.Add(order);
             _restaurantService.SetTableLocked(tableId);
 
-            /// TODO: Payment Here..
-
             _shoppingCartService.ClearCart(customer.Id);
 
             return order;
+        }
+
+        public void ChangeOrderStatus(OrderStatus status, Order order)
+        {
+            if (order == null)
+                throw new ArgumentNullException(nameof(order));
+
+            order.OrderStatus = status;
+
+            _orderRepository.Update(order);
         }
 
         public IPagedList<GetOrdersResponse> GetCustomerOrders(GetOrdersRequest request)
