@@ -9,8 +9,7 @@ namespace Eazzy.Domain.Models.OrderManagement.Enums
     public enum OrderStatus
     {
         Pending = 1 << 0,
-        Failed = 1 << 1,
-        Success = 1 << 2,
-        Rejected = 1 << 3
+        Success = 1 << 1,
+        Rejected = 1 << 2
     }
 }
