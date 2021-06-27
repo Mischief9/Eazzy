@@ -23,7 +23,7 @@ namespace Eazzy.Models.Order
                     return OrderStatus.Success;
 
                 default:
-                    return OrderStatus.Failed;
+                    return OrderStatus.Rejected;
             }
         }
     }
