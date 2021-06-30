@@ -11,6 +11,8 @@
     <Compile Remove="Migrations\20210420165912_roleRoleClaims.Designer.cs" />
     <Compile Remove="Migrations\20210627121458_initCard.cs" />
     <Compile Remove="Migrations\20210627121458_initCard.Designer.cs" />
+    <Compile Remove="Migrations\20210630205421_paymentTransacion.cs" />
+    <Compile Remove="Migrations\20210630205421_paymentTransacion.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

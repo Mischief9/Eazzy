@@ -8,6 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using Eazzy.Application.Models.Order;
 using System.Net;
 using Eazzy.Models.Order;
+using Eazzy.Models.Payment;
+using Eazzy.Application.Services.PaymentService;
+using Eazzy.Domain.Models.PaymentManagement;
+using System.Threading.Tasks;
+using System;
 
 namespace Eazzy.V1.Controllers
 {
@@ -15,10 +20,13 @@ namespace Eazzy.V1.Controllers
     public class OrderController : WebApiController
     {
         private readonly IOrderService _orderService;
+        private readonly IPaymentService _paymentService;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService,
+            IPaymentService paymentService)
         {
             _orderService = orderService;
+            _paymentService = paymentService;
         }
 
         [HttpGet]
@@ -75,6 +83,68 @@ namespace Eazzy.V1.Controllers
             _orderService.ChangeOrderStatus(status, order);
 
             return NoContent();
+        }
+
+        [HttpGet("paymenttransaction")]
+        [ProducesResponseType(typeof(PagedList<PaymentTransaction>),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        public IActionResult GetPaymentTransactions([FromQuery]SortAndPaged sortAndPaged)
+        {
+            var paymentTransactions = _paymentService.GetPaymentTransactions(sortAndPaged);
+
+            return Ok(paymentTransactions);
+        }
+
+        [HttpPost("paymenttransaction")]
+        [ProducesResponseType(typeof(PaymentTransaction), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        public IActionResult AddPaymentTransaction([FromBody]AddOrUpdatePaymentTransaction model)
+        {
+            var newPaymentTransaction = new PaymentTransaction()
+            {
+                SecondaryId = Guid.NewGuid(),
+                ExternalTransactionIdentifier = model.ExternalTransactionIdentifier,
+                Status = model.Status,
+                StatusCode = model.StatusCode,
+                StatusDescription = model.StatusDescription,
+                CardId = model.CardId,
+                RawRequest = model.RawRequest,
+                RawResponse = model.RawResponse,
+                Type = model.Type,
+                CreateDateOnUtc = DateTime.UtcNow
+            };
+
+            var paymentTransaction = _paymentService.InsertPaymentTransaction(newPaymentTransaction);
+
+            return Ok(paymentTransaction);
+        }
+
+        [HttpPatch("paymenttransaction")]
+        [ProducesResponseType(typeof(PaymentTransaction), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
+        public IActionResult UpdatePaymentTransaction([FromBody]AddOrUpdatePaymentTransaction model)
+        {
+            var paymentTransaction = _paymentService.FindById(model.Id);
+
+            if(paymentTransaction == null)
+            {
+                return Fail(HttpStatusCode.NotFound, "Payment Transaction wasn't found.");
+            }
+
+            paymentTransaction.ExternalTransactionIdentifier = model.ExternalTransactionIdentifier;
+            paymentTransaction.Status = model.Status;
+            paymentTransaction.StatusCode = model.StatusCode;
+            paymentTransaction.StatusDescription = model.StatusDescription;
+            paymentTransaction.CardId = model.CardId;
+            paymentTransaction.RawRequest = model.RawRequest;
+            paymentTransaction.RawResponse = model.RawResponse;
+            paymentTransaction.Type = model.Type;
+            paymentTransaction.UpdateDateOnutc = DateTime.UtcNow;
+
+            _paymentService.UpdatePaymentTransaction(paymentTransaction);
+
+            return Ok(paymentTransaction);
         }
     }
 }

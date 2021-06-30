@@ -1,14 +1,14 @@
 ﻿using Eazzy.Domain.Models.PaymentManagement.Enums;
-using Eazzy.Shared.DomainCore;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Eazzy.Domain.Models.PaymentManagement
+namespace Eazzy.Models.Payment
 {
-    public class PaymentTransaction : Entity
+    public class AddOrUpdatePaymentTransaction
     {
-        public Guid SecondaryId { get; set; }
+        public int Id { get; set; }
 
         public string ExternalTransactionIdentifier { get; set; }
 
@@ -25,9 +25,5 @@ namespace Eazzy.Domain.Models.PaymentManagement
         public string RawRequest { get; set; }
 
         public string RawResponse { get; set; }
-
-        public DateTime CreateDateOnUtc { get; set; }
-
-        public DateTime? UpdateDateOnutc { get; set; }
     }
 }

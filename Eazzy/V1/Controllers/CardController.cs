@@ -62,7 +62,7 @@ namespace Eazzy.V1.Controllers
                 CCV = model.CCV,
                 Expires = model.Expires,
                 NumberMask = model.NumberMask,
-                Guid = new Guid(),
+                Guid = Guid.NewGuid(),
                 Customer = customer
             };
 
