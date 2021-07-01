@@ -1,4 +1,5 @@
-﻿using Eazzy.Domain.Models.RestaurantManagement;
+﻿using Eazzy.Domain.Models.MenuManagement;
+using Eazzy.Domain.Models.RestaurantManagement;
 using Eazzy.Domain.Models.TenantManagement.Enums;
 using Eazzy.Shared.DomainCore;
 using System;
@@ -23,6 +24,8 @@ namespace Eazzy.Domain.Models.TenantManagement
 
         public decimal? TaxPercentage { get; set; }
 
+        public string ImageFileName { get; set; }
+
         public TenantStatus TenantStatus { get; set; }
 
         public DateTime CreateDateOnUtc { get; set; }
@@ -32,5 +35,7 @@ namespace Eazzy.Domain.Models.TenantManagement
         public bool IsDeleted { get; set; }
 
         public virtual ICollection<Table> Tables { get; set; }
+
+        public virtual ICollection<Menu> Menus { get; set; }
     }
 }

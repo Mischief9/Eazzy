@@ -1,5 +1,6 @@
 ﻿using Eazzy.Application.Models.Restaurant;
 using Eazzy.Application.Services.CustomerService;
+using Eazzy.Application.Services.ImageService;
 using Eazzy.Application.Services.RestaurantService;
 using Eazzy.Domain.Models.RestaurantManagement;
 using Eazzy.Domain.Models.TenantManagement;
@@ -22,12 +23,15 @@ namespace Eazzy.V1.Controllers
     {
         private readonly IRestaurantService _restaurantService;
         private readonly ICustomerService _customerService;
+        private readonly IImageService _imageService;
 
         public RestaurantController(IRestaurantService restaurantService,
-            ICustomerService customerService)
+            ICustomerService customerService,
+            IImageService imageService)
         {
             _restaurantService = restaurantService;
             _customerService = customerService;
+            _imageService = imageService;
         }
 
         [HttpGet]
@@ -86,7 +90,7 @@ namespace Eazzy.V1.Controllers
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
         // [Authorize(Roles = "Administrator")]
-        public IActionResult ChangeRestaurantDetails([FromBody] UpdateRestaurantModel model)
+        public IActionResult ChangeRestaurantDetails([FromForm] UpdateRestaurantModel model)
         {
             var customer = GetCurrentCustomer();
             var tenantId = customer.User.TenantId;
@@ -110,6 +114,12 @@ namespace Eazzy.V1.Controllers
             restaurant.TaxPercentage = model.TaxPercentage;
             restaurant.TimeZone = model.TimeZone;
             restaurant.UpdatedDateTimeOnUtc = DateTime.UtcNow;
+
+            if(model.Image != null)
+            {
+                var fileName = _imageService.Upload(model.Image);
+                restaurant.ImageFileName = fileName;
+            }
 
             _restaurantService.UpdateTenant(restaurant);
 

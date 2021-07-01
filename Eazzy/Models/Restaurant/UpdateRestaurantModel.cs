@@ -1,4 +1,5 @@
 ﻿using Eazzy.Domain.Models.TenantManagement.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,7 @@ namespace Eazzy.Models.Restaurant
         public decimal? TaxAmount { get; set; }
 
         public decimal? TaxPercentage { get; set; }
+
+        public IFormFile Image { get; set; }
     }
 }

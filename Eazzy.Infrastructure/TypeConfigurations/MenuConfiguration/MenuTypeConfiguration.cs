@@ -17,6 +17,10 @@ namespace Eazzy.Infrastructure.TypeConfigurations.MenuConfiguration
             builder.HasMany(x => x.MenuItems)
                 .WithOne(x => x.Menu)
                 .HasForeignKey(x => x.MenuId);
+
+            builder.HasOne(x => x.Tenant)
+                .WithMany(x=>x.Menus)
+                .HasForeignKey(x=>x.TenantId);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Eazzy.Application.Models.Menu;
 using Eazzy.Application.Services.CustomerService;
+using Eazzy.Application.Services.ImageService;
 using Eazzy.Application.Services.MenuService;
 using Eazzy.Domain.Models.MenuManagement;
 using Eazzy.Infrastructure;
@@ -21,12 +22,15 @@ namespace Eazzy.V1.Controllers
     {
         private readonly IMenuService _menuService;
         private readonly ICustomerService _customerService;
+        private readonly IImageService _imageService;
 
         public MenuController(IMenuService menuService,
-            ICustomerService customerService)
+            ICustomerService customerService,
+            IImageService imageService)
         {
             _menuService = menuService;
             _customerService = customerService;
+            _imageService = imageService;
         }
 
         [HttpGet]
@@ -35,10 +39,19 @@ namespace Eazzy.V1.Controllers
         public IActionResult GetAllRestaurantMenus([FromQuery] GetMenuRequest filter)
         {
             var restaurantMenus = _menuService.GetMenus(filter);
+            var model = restaurantMenus.Data.Select(x => new MenuResponse()
+            {
+                CreateDateOnUtc = x.CreateDateOnUtc,
+                ImageUrl = _imageService.GetImageUrlByName(x.Tenant.ImageFileName),
+                MenuItems = x.MenuItems.ToList(),
+                Name = x.Name,
+                TenantId = x.TenantId,
+                UpdatedDateOnUtc = x.UpdatedDateOnUtc
+            });
 
             return Ok(new
             {
-                data = restaurantMenus.Data,
+                data = model,
                 totalCount = restaurantMenus.TotalCount
             });
         }
@@ -137,15 +150,27 @@ namespace Eazzy.V1.Controllers
                 return Fail(HttpStatusCode.NotFound, "Menu item wasn't found.");
             }
 
-            return Ok(menuItem);
+            var model = new MenuItemResponse()
+            {
+                Name = menuItem.Name,
+                Description = menuItem.Description,
+                ImageUrl = _imageService.GetImageUrlByName(menuItem.ImageFileName),
+                MenuId = menuItem.MenuId,
+                MenuItemTypeId = menuItem.MenuItemTypeId,
+                Price = menuItem.Price
+            };
+
+            return Ok(model);
         }
 
         [HttpPost("menuitem")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         // [Authorize(Roles = "Administrator")]
-        public IActionResult AddMenuItem([FromBody] AddOrUpdateMenuItemModel model)
+        public IActionResult AddMenuItem([FromForm] AddOrUpdateMenuItemModel model)
         {
+            var image = model.Image;
+
             var menuItem = new MenuItem()
             {
                 Name = model.Name,
@@ -155,7 +180,14 @@ namespace Eazzy.V1.Controllers
                 MenuId = model.MenuId
             };
 
+            if (image != null)
+            {
+                var fileName = _imageService.Upload(image);
+                menuItem.ImageFileName = fileName;
+            }
+
             _menuService.InsertMenuItem(menuItem);
+
 
             return StatusCode(StatusCodes.Status201Created);
         }
@@ -178,6 +210,14 @@ namespace Eazzy.V1.Controllers
             menuItem.Description = model.Description;
             menuItem.MenuItemTypeId = model.MenuItemTypeId;
             menuItem.Price = model.Price;
+
+            var image = model.Image;
+
+            if (image != null)
+            {
+                var fileName = _imageService.Upload(image);
+                menuItem.ImageFileName = fileName;
+            }
 
             _menuService.UpdateMenuItem(menuItem);
 
@@ -220,7 +260,7 @@ namespace Eazzy.V1.Controllers
 
             var menuItemTypes = _menuService.GetMenuItemTypes(request);
 
-            return Ok( new
+            return Ok(new
             {
                 data = menuItemTypes.Data,
                 totalCount = menuItemTypes.TotalCount

@@ -1,5 +1,6 @@
 ﻿using Eazzy.Domain.Models.MenuManagement.Enum;
 using Eazzy.Shared.DomainCore;
+using System;
 
 namespace Eazzy.Domain.Models.MenuManagement
 {
@@ -10,6 +11,8 @@ namespace Eazzy.Domain.Models.MenuManagement
         public string Description { get; set; }
 
         public decimal Price { get; set; }
+
+        public string ImageFileName { get; set; }
 
         public int MenuId { get; set; }
 

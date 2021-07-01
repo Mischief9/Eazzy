@@ -26,4 +26,9 @@
     <ProjectReference Include="..\Eazzy.DI\Eazzy.DI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\Images\3ae87fda-d596-45e2-9878-7064444effa0.png" />
+    <None Include="wwwroot\Images\f1f94e97-1def-4256-8302-d9ad8780eccc.png" />
+  </ItemGroup>
+
 </Project>

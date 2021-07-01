@@ -4,14 +4,16 @@ using Eazzy.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Eazzy.Infrastructure.Migrations
 {
     [DbContext(typeof(EazzyDbContext))]
-    partial class EazzyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210701170551_imageUrl")]
+    partial class imageUrl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -338,8 +340,6 @@ namespace Eazzy.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TenantId");
-
                     b.ToTable("Menus");
                 });
 
@@ -536,9 +536,6 @@ namespace Eazzy.Infrastructure.Migrations
                     b.Property<DateTime>("CreateDateOnUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ImageFileName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -640,15 +637,6 @@ namespace Eazzy.Infrastructure.Migrations
                     b.HasOne("Eazzy.Domain.Models.AccountManagement.User", "User")
                         .WithOne("Customer")
                         .HasForeignKey("Eazzy.Domain.Models.CustomerManagement.Customer", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Eazzy.Domain.Models.MenuManagement.Menu", b =>
-                {
-                    b.HasOne("Eazzy.Domain.Models.TenantManagement.Tenant", "Tenant")
-                        .WithMany("Menus")
-                        .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

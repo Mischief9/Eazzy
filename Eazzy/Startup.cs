@@ -176,6 +176,8 @@ namespace Eazzy
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
