@@ -1,5 +1,6 @@
 ﻿using Eazzy.Application.Models.Menu;
 using Eazzy.Domain.Models.MenuManagement;
+using Eazzy.Models.Menu;
 using Eazzy.Shared.DomainCore;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace Eazzy.Application.Services.MenuService
         IPagedList<Menu> GetMenus(GetMenuRequest request);
 
         MenuItem GetMenuItemById(int id);
+
+        IPagedList<MenuItem> GetMenuItems(int menuId, GetMenuItemsRequest request);
 
         void InsertMenuItem(MenuItem menuItem);
 

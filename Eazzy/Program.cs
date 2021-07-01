@@ -22,7 +22,9 @@ namespace Eazzy
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                    .UseWebRoot("wwwroot")
+                    .UseStartup<Startup>();
                 });
     }
 }

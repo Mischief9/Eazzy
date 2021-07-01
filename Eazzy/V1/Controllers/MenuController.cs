@@ -137,6 +137,27 @@ namespace Eazzy.V1.Controllers
             return NoContent();
         }
 
+        [HttpPost("menuitem/{menuId}")]
+        [ProducesResponseType(typeof(MenuItemResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
+        public IActionResult GetMenuItem([FromRoute] int menuId, [FromBody] GetMenuItemsRequest request)
+        {
+            var menuItems = _menuService.GetMenuItems(menuId, request);
+
+            var model = menuItems.Select(x=>new MenuItemResponse()
+            {
+                Name = x.Name,
+                Description = x.Description,
+                ImageUrl = _imageService.GetImageUrlByName(x.ImageFileName),
+                MenuId = x.MenuId,
+                MenuItemTypeId = x.MenuItemTypeId,
+                Price = x.Price
+            });
+
+            return Ok(new { data = model, totalCount = menuItems.TotalCount });
+        }
+
         [HttpGet("menuitem/{menuItemId}")]
         [ProducesResponseType(typeof(MenuItem), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]

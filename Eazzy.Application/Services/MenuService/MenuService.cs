@@ -1,6 +1,7 @@
 ﻿using Eazzy.Application.Models.Menu;
 using Eazzy.Domain.Models.MenuManagement;
 using Eazzy.Infrastructure.Repository.Interfaces;
+using Eazzy.Models.Menu;
 using Eazzy.Shared.DomainCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -47,6 +48,18 @@ namespace Eazzy.Application.Services.MenuService
             var menu = _menuRepository.Find(id);
 
             return menu;
+        }
+
+        public IPagedList<MenuItem> GetMenuItems(int menuId, GetMenuItemsRequest request)
+        {
+            var menuItems = _menuItemRepository.Table.Where(x=>x.MenuId == menuId);
+
+            if(request.MenuItemTypeIds != null && request.MenuItemTypeIds.Any())
+            {
+                menuItems = menuItems.Where(x => request.MenuItemTypeIds.Contains(x.MenuItemTypeId));
+            }
+
+            return new PagedList<MenuItem>(menuItems, request.PageIndex, request.PageSize);
         }
 
         public MenuItem GetMenuItemById(int id)
