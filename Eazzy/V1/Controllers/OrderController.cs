@@ -52,7 +52,7 @@ namespace Eazzy.V1.Controllers
                 SortBy = sortAndPaged.SortBy
             });
 
-            return Ok(model);
+            return Ok(new { data = model.Data, totalCount = model.TotalCount });
         }
 
 
@@ -86,19 +86,19 @@ namespace Eazzy.V1.Controllers
         }
 
         [HttpGet("paymenttransaction")]
-        [ProducesResponseType(typeof(PagedList<PaymentTransaction>),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PagedList<PaymentTransaction>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
-        public IActionResult GetPaymentTransactions([FromQuery]SortAndPaged sortAndPaged)
+        public IActionResult GetPaymentTransactions([FromQuery] SortAndPaged sortAndPaged)
         {
             var paymentTransactions = _paymentService.GetPaymentTransactions(sortAndPaged);
 
-            return Ok(paymentTransactions);
+            return Ok(new { data = paymentTransactions.Data, totalCount = paymentTransactions.TotalCount });
         }
 
         [HttpPost("paymenttransaction")]
         [ProducesResponseType(typeof(PaymentTransaction), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
-        public IActionResult AddPaymentTransaction([FromBody]AddOrUpdatePaymentTransaction model)
+        public IActionResult AddPaymentTransaction([FromBody] AddOrUpdatePaymentTransaction model)
         {
             var newPaymentTransaction = new PaymentTransaction()
             {
@@ -123,11 +123,11 @@ namespace Eazzy.V1.Controllers
         [ProducesResponseType(typeof(PaymentTransaction), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
-        public IActionResult UpdatePaymentTransaction([FromBody]AddOrUpdatePaymentTransaction model)
+        public IActionResult UpdatePaymentTransaction([FromBody] AddOrUpdatePaymentTransaction model)
         {
             var paymentTransaction = _paymentService.FindById(model.Id);
 
-            if(paymentTransaction == null)
+            if (paymentTransaction == null)
             {
                 return Fail(HttpStatusCode.NotFound, "Payment Transaction wasn't found.");
             }

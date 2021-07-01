@@ -47,7 +47,11 @@ namespace Eazzy.V1.Controllers
                 return Fail(HttpStatusCode.NotFound, "Cards weren't found.");
             }
 
-            return Ok(cards);
+            return Ok(new
+            {
+                data = cards.Data,
+                totalCount = cards.TotalCount
+            });
         }
 
         [HttpPost]

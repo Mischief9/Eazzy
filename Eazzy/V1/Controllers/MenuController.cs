@@ -36,7 +36,11 @@ namespace Eazzy.V1.Controllers
         {
             var restaurantMenus = _menuService.GetMenus(filter);
 
-            return Ok(restaurantMenus);
+            return Ok(new
+            {
+                data = restaurantMenus.Data,
+                totalCount = restaurantMenus.TotalCount
+            });
         }
 
         [HttpPost]
@@ -216,7 +220,11 @@ namespace Eazzy.V1.Controllers
 
             var menuItemTypes = _menuService.GetMenuItemTypes(request);
 
-            return Ok(menuItemTypes);
+            return Ok( new
+            {
+                data = menuItemTypes.Data,
+                totalCount = menuItemTypes.TotalCount
+            });
         }
 
         [HttpGet("menuitemtype/{menuItemTypeId}")]

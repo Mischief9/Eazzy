@@ -37,7 +37,7 @@ namespace Eazzy.V1.Controllers
         {
             var restaurants = _restaurantService.GetAllRestaurant(filter);
 
-            return Ok(restaurants);
+            return Ok(new { data = restaurants.Data, totalCount = restaurants.TotalCount });
         }
 
         [HttpPost("register/newrestaurant")]
@@ -69,7 +69,7 @@ namespace Eazzy.V1.Controllers
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
         // [Authorize(Roles = "Administrator")]
-        public IActionResult ChangeRestaurantDetails([FromRoute]int id)
+        public IActionResult ChangeRestaurantDetails([FromRoute] int id)
         {
             var restaurant = _restaurantService.FindById(id);
 
@@ -82,7 +82,7 @@ namespace Eazzy.V1.Controllers
         }
 
         [HttpPatch]
-        [ProducesResponseType(typeof(Tenant),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Tenant), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
         // [Authorize(Roles = "Administrator")]
@@ -98,7 +98,7 @@ namespace Eazzy.V1.Controllers
 
             var restaurant = _restaurantService.FindById(tenantId.Value);
 
-            if(restaurant == null)
+            if (restaurant == null)
             {
                 return Fail(HttpStatusCode.NotFound, "Restaurant wasn't found.");
             }
@@ -154,7 +154,7 @@ namespace Eazzy.V1.Controllers
 
             var tables = _restaurantService.GetTables(tenantId.Value, freeTable, pageIndex, pageSize);
 
-            return Ok(tables);
+            return Ok(new { data = tables.Data, totalCount = tables.TotalCount });
         }
 
 
@@ -202,7 +202,7 @@ namespace Eazzy.V1.Controllers
 
 
         [HttpPatch("tables/{tableId}")]
-        [ProducesResponseType(typeof(Table),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Table), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
         public IActionResult ChangeTable([FromRoute] int tableId, [FromBody] AddTableModel model)

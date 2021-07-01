@@ -105,7 +105,7 @@ namespace Eazzy.V1.Controllers
                 SortBy = sortAndPaged.SortBy
             });
 
-            return Ok(model);
+            return Ok(new { data = model, totalCount = model.TotalCount });
         }
     }
 }
