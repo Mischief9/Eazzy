@@ -34,7 +34,7 @@ namespace Eazzy.V1.Controllers
             _imageService = imageService;
         }
 
-        [HttpGet]
+        [HttpGet("All")]
         [ProducesResponseType(typeof(PagedList<Tenant>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         public IActionResult GetRestaurants([FromQuery] GetRestaurantFilter filter)
