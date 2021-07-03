@@ -41,6 +41,7 @@ namespace Eazzy.V1.Controllers
             var restaurantMenus = _menuService.GetMenus(filter);
             var model = restaurantMenus.Data.Select(x => new MenuResponse()
             {
+                MenuId = x.Id,
                 CreateDateOnUtc = x.CreateDateOnUtc,
                 ImageUrl = _imageService.GetImageUrlByName(x.Tenant.ImageFileName),
                 MenuItems = x.MenuItems.ToList(),
@@ -147,6 +148,7 @@ namespace Eazzy.V1.Controllers
 
             var model = menuItems.Select(x=>new MenuItemResponse()
             {
+                MenuItemId = x.Id,
                 Name = x.Name,
                 Description = x.Description,
                 ImageUrl = _imageService.GetImageUrlByName(x.ImageFileName),
@@ -173,6 +175,7 @@ namespace Eazzy.V1.Controllers
 
             var model = new MenuItemResponse()
             {
+                MenuItemId = menuItem.Id,
                 Name = menuItem.Name,
                 Description = menuItem.Description,
                 ImageUrl = _imageService.GetImageUrlByName(menuItem.ImageFileName),

@@ -7,6 +7,8 @@ namespace Eazzy.Models.Menu
 {
     public class MenuItemResponse
     {
+        public int MenuItemId { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }

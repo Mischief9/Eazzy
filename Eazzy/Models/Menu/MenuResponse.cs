@@ -8,6 +8,8 @@ namespace Eazzy.Models.Menu
 {
     public class MenuResponse
     {
+        public int MenuId { get; set; }
+
         public int TenantId { get; set; }
 
         public string ImageUrl { get; set; }
