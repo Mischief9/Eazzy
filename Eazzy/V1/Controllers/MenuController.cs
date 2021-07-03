@@ -344,7 +344,7 @@ namespace Eazzy.V1.Controllers
             return Ok(menuItemType);
         }
 
-        [HttpDelete("menuitemtype/{menuItemId}")]
+        [HttpDelete("menuitemtype/{menuItemTypeId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
@@ -355,7 +355,7 @@ namespace Eazzy.V1.Controllers
 
             if (menuItemType == null)
             {
-                return Fail(HttpStatusCode.NotFound, "Menu item wasn't found.");
+                return Fail(HttpStatusCode.NotFound, "Menu Item Type wasn't found.");
             }
 
             _menuService.DeleteMenuItemType(menuItemType);
