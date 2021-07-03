@@ -68,12 +68,35 @@ namespace Eazzy.V1.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         [ProducesResponseType(typeof(Tenant), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
         // [Authorize(Roles = "Administrator")]
-        public IActionResult ChangeRestaurantDetails([FromRoute] int id)
+        public IActionResult ChangeRestaurantDetails()
+        {
+            var id = GetCurrentCustomer().User.TenantId;
+
+            if (!id.HasValue)
+            {
+                return Fail(HttpStatusCode.NotFound, "Restaurant wasn't found.");
+            }
+
+            var restaurant = _restaurantService.FindById(id.Value);
+
+            if (restaurant == null)
+            {
+                return Fail(HttpStatusCode.NotFound, "Restaurant wasn't found.");
+            }
+
+            return Ok(restaurant);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(Tenant), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
+        public IActionResult RestaurantDetails([FromRoute]int id)
         {
             var restaurant = _restaurantService.FindById(id);
 
