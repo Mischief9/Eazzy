@@ -70,6 +70,7 @@ namespace Eazzy.Application.Services.AccountService
                     };
 
                     _db.Set<UserRole>().Add(userRole);
+                    _db.SaveChanges();
                 }
 
                 return new ResultSuccess { Success = true };
