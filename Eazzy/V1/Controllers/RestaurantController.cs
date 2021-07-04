@@ -35,13 +35,13 @@ namespace Eazzy.V1.Controllers
         }
 
         [HttpGet("All")]
-        [ProducesResponseType(typeof(List<RestaurantListResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<RestaurantResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         public IActionResult GetRestaurants([FromQuery] GetRestaurantFilter filter)
         {
             var restaurants = _restaurantService.GetAllRestaurant(filter);
 
-            var model = restaurants.Select(x => new RestaurantListResponse()
+            var model = restaurants.Select(x => new RestaurantResponse()
             {
                 Id = x.Id,
                 TenantStatus = x.TenantStatus,
@@ -123,7 +123,24 @@ namespace Eazzy.V1.Controllers
                 return Fail(HttpStatusCode.NotFound, "Restaurant wasn't found.");
             }
 
-            return Ok(restaurant);
+            var model = new RestaurantResponse()
+            {
+                Id = restaurant.Id,
+                TenantStatus = restaurant.TenantStatus,
+                Address = restaurant.Address,
+                CreateDateOnUtc = restaurant.CreateDateOnUtc,
+                Description = restaurant.Description,
+                ImageUrl = _imageService.GetImageUrlByName(restaurant.ImageFileName),
+                Name = restaurant.Name,
+                PhoneNumber = restaurant.PhoneNumber,
+                TaxAmount = restaurant.TaxAmount,
+                TaxPercentage = restaurant.TaxPercentage,
+                TaxType = restaurant.TaxType,
+                TimeZone = restaurant.TimeZone,
+                UpdatedDateTimeOnUtc = restaurant.UpdatedDateTimeOnUtc
+            };
+
+            return Ok(model);
         }
 
         [HttpPatch]

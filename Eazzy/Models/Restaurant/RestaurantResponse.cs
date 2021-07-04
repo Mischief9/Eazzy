@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eazzy.Models.Restaurant
 {
-    public class RestaurantListResponse
+    public class RestaurantResponse
     {
         public int Id { get; set; }
 
