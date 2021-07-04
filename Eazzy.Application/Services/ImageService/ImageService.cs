@@ -22,6 +22,13 @@ namespace Eazzy.Application.Services.ImageService
 
         public string GetImageUrlByName(string name)
         {
+            var imagePath = _basePath + $"/{name}";
+
+            if (!File.Exists(imagePath))
+            {
+                return $"https://localhost:44353/Images/noImage.jpg"; ;
+            }
+
             return $"https://localhost:44353/Images/{name}";
         }
 

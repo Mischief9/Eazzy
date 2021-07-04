@@ -35,7 +35,7 @@ namespace Eazzy.V1.Controllers
         }
 
         [HttpGet("All")]
-        [ProducesResponseType(typeof(PagedList<Tenant>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<RestaurantListResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         public IActionResult GetRestaurants([FromQuery] GetRestaurantFilter filter)
         {
@@ -54,7 +54,8 @@ namespace Eazzy.V1.Controllers
                 TaxPercentage = x.TaxPercentage,
                 TaxType = x.TaxType,
                 TimeZone = x.TimeZone,
-                UpdatedDateTimeOnUtc = x.UpdatedDateTimeOnUtc
+                UpdatedDateTimeOnUtc = x.UpdatedDateTimeOnUtc,
+                Description = x.Description
             });
 
             return Ok(new { data = model, totalCount = restaurants.TotalCount });
@@ -76,7 +77,8 @@ namespace Eazzy.V1.Controllers
                 PhoneNumber = newRestaurant.PhoneNumber,
                 TaxType = newRestaurant.TaxType,
                 TaxAmount = newRestaurant.TaxAmount,
-                TaxPercentage = newRestaurant.TaxPercentage
+                TaxPercentage = newRestaurant.TaxPercentage,
+                Description = newRestaurant.Description
             };
 
             await _restaurantService.CreateNewRestaurant(newTenant, newRestaurant.SignUpRequest);
@@ -153,6 +155,7 @@ namespace Eazzy.V1.Controllers
             restaurant.TaxPercentage = model.TaxPercentage;
             restaurant.TimeZone = model.TimeZone;
             restaurant.UpdatedDateTimeOnUtc = DateTime.UtcNow;
+            restaurant.Description = model.Description;
 
             if (model.Image != null)
             {

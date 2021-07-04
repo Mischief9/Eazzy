@@ -4,14 +4,16 @@ using Eazzy.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Eazzy.Infrastructure.Migrations
 {
     [DbContext(typeof(EazzyDbContext))]
-    partial class EazzyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210704171516_tenantDescription")]
+    partial class tenantDescription
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -20,6 +20,8 @@ namespace Eazzy.Application.Models.Restaurant
 
         public decimal? TaxPercentage { get; set; }
 
+        public string Description { get; set; }
+
         public TenantStatus TenantStatus { get; set; }
 
         public SignUpRequest SignUpRequest { get; set; }
