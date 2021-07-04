@@ -41,7 +41,23 @@ namespace Eazzy.V1.Controllers
         {
             var restaurants = _restaurantService.GetAllRestaurant(filter);
 
-            return Ok(new { data = restaurants.Data, totalCount = restaurants.TotalCount });
+            var model = restaurants.Select(x => new RestaurantListResponse()
+            {
+                Id = x.Id,
+                TenantStatus = x.TenantStatus,
+                Address = x.Address,
+                CreateDateOnUtc = x.CreateDateOnUtc,
+                ImageUrl = _imageService.GetImageUrlByName(x.ImageFileName),
+                Name = x.Name,
+                PhoneNumber = x.PhoneNumber,
+                TaxAmount = x.TaxAmount,
+                TaxPercentage = x.TaxPercentage,
+                TaxType = x.TaxType,
+                TimeZone = x.TimeZone,
+                UpdatedDateTimeOnUtc = x.UpdatedDateTimeOnUtc
+            });
+
+            return Ok(new { data = model, totalCount = restaurants.TotalCount });
         }
 
         [HttpPost("register/newrestaurant")]
@@ -96,7 +112,7 @@ namespace Eazzy.V1.Controllers
         [ProducesResponseType(typeof(Tenant), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(FailedResponse), StatusCodes.Status404NotFound)]
-        public IActionResult RestaurantDetails([FromRoute]int id)
+        public IActionResult RestaurantDetails([FromRoute] int id)
         {
             var restaurant = _restaurantService.FindById(id);
 
@@ -138,7 +154,7 @@ namespace Eazzy.V1.Controllers
             restaurant.TimeZone = model.TimeZone;
             restaurant.UpdatedDateTimeOnUtc = DateTime.UtcNow;
 
-            if(model.Image != null)
+            if (model.Image != null)
             {
                 var fileName = _imageService.Upload(model.Image);
                 restaurant.ImageFileName = fileName;
