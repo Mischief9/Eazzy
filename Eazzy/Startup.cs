@@ -52,7 +52,7 @@ namespace Eazzy
             {
                 options.AddPolicy(MyAllowSpecificOrigins, builder =>
                 {
-                    var acceptableDomains = new string[] { Configuration["Cors:AcceptableDomain"] };
+                    var acceptableDomains = Configuration.GetSection("Cors:AcceptableDomain").Get<string[]>();
                     builder.WithOrigins(acceptableDomains)
                     .AllowAnyMethod()
                     .AllowAnyHeader()
@@ -236,7 +236,7 @@ namespace Eazzy
             }
 
             // add system administrator user.
-            var newUser =  userManager.CreateAsync(new User()
+            var newUser = userManager.CreateAsync(new User()
             {
                 Email = "admin@eazzy.ge",
                 UserName = "SysAdmin",
@@ -252,7 +252,7 @@ namespace Eazzy
             // add system administrator and user relationship.
             var sysAdministrator = context.Set<Role>().First(x => x.Name == "System Administrator");
             var sysUser = context.Set<User>().First(x => x.UserName == "SysAdmin");
-            
+
             var sysAdminUserRole = new UserRole()
             {
                 RoleId = sysAdministrator.Id,
