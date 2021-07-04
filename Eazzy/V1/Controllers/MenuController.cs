@@ -44,7 +44,16 @@ namespace Eazzy.V1.Controllers
                 MenuId = x.Id,
                 CreateDateOnUtc = x.CreateDateOnUtc,
                 ImageUrl = _imageService.GetImageUrlByName(x.Tenant.ImageFileName),
-                MenuItems = x.MenuItems.ToList(),
+                MenuItems = x.MenuItems.Select(mi => new MenuItemResponse
+                {
+                    MenuItemId = mi.Id,
+                    Description = mi.Description,
+                    ImageUrl = _imageService.GetImageUrlByName(mi.ImageFileName),
+                    MenuId = mi.MenuId,
+                    MenuItemTypeId = mi.MenuItemTypeId,
+                    Name = mi.Name,
+                    Price = mi.Price
+                }).ToList(),
                 Name = x.Name,
                 TenantId = x.TenantId,
                 UpdatedDateOnUtc = x.UpdatedDateOnUtc
@@ -146,7 +155,7 @@ namespace Eazzy.V1.Controllers
         {
             var menuItems = _menuService.GetMenuItems(menuId, request);
 
-            var model = menuItems.Select(x=>new MenuItemResponse()
+            var model = menuItems.Select(x => new MenuItemResponse()
             {
                 MenuItemId = x.Id,
                 Name = x.Name,

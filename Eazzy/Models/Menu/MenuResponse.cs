@@ -20,6 +20,6 @@ namespace Eazzy.Models.Menu
 
         public DateTime UpdatedDateOnUtc { get; set; }
 
-        public virtual IList<MenuItem> MenuItems { get; set; }
+        public virtual IList<MenuItemResponse> MenuItems { get; set; }
     }
 }
