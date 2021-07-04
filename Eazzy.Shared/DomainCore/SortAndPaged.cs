@@ -11,7 +11,7 @@ namespace Eazzy.Shared.DomainCore
 
         public SortBy SortBy { get; set; } = SortBy.DESC;
 
-        public int PageSize { get; set; } = 10;
+        public int PageSize { get; set; } = int.MaxValue;
 
         public int PageIndex { get; set; } = 1;
     }
