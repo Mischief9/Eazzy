@@ -1,4 +1,5 @@
 ﻿using Eazzy.Application.Models.Order;
+using Eazzy.Application.Services.ImageService;
 using Eazzy.Application.Services.RestaurantService;
 using Eazzy.Application.Services.ShoppingCartService;
 using Eazzy.Domain.Models.CustomerManagement;
@@ -20,17 +21,20 @@ namespace Eazzy.Application.Services.OrderService
     {
         private readonly IRestaurantService _restaurantService;
         private readonly IShoppingCartService _shoppingCartService;
+        private readonly IImageService _imageService;
         private readonly IRepository<Order> _orderRepository;
         private readonly IRepository<Tenant> _tenantRepository;
         public OrderService(IRepository<Order> orderRepository,
             IRepository<Tenant> tenantRepository,
             IRestaurantService restaurantService,
-            IShoppingCartService shoppingCartService)
+            IShoppingCartService shoppingCartService,
+            IImageService imageService)
         {
             _orderRepository = orderRepository;
             _tenantRepository = tenantRepository;
             _restaurantService = restaurantService;
             _shoppingCartService = shoppingCartService;
+            _imageService = imageService;
         }
 
         public Order FindById(int id)
@@ -167,6 +171,7 @@ namespace Eazzy.Application.Services.OrderService
                     OrderTotal = x.OrderTotal,
                     TaxService = x.TaxService,
                     CustomerName = x.Customer.GetFullName(),
+                    ImageUrl = x.Tenant.ImageFileName,
                     Items = x.OrderItems.Select(x => new GetOrderItem()
                     {
                         MenuItemId = x.MenuItemId,

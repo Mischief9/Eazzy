@@ -1,5 +1,6 @@
 ﻿using Eazzy.Application.Models.Order;
 using Eazzy.Application.Services.CustomerService;
+using Eazzy.Application.Services.ImageService;
 using Eazzy.Application.Services.OrderService;
 using Eazzy.Application.Services.RoleService;
 using Eazzy.Domain.Models.CustomerManagement;
@@ -23,10 +24,12 @@ namespace Eazzy.V1.Controllers
         private readonly ICustomerService _customerService;
         private readonly IOrderService _orderService;
         private readonly IRoleService _roleService;
+        private readonly IImageService _imageService;
 
         public CustomerController(ICustomerService customerService,
             IOrderService orderService,
-            IRoleService roleService)
+            IRoleService roleService,
+            IImageService imageService)
         {
             _customerService = customerService;
             _orderService = orderService;
@@ -96,7 +99,7 @@ namespace Eazzy.V1.Controllers
                 return Fail(HttpStatusCode.NotFound, "Customer wasn't found.");
             }
 
-            var model = _orderService.GetCustomerOrders(new GetOrdersRequest()
+            var response = _orderService.GetCustomerOrders(new GetOrdersRequest()
             {
                 CustomerId = customer.Id,
                 PageSize = sortAndPaged.PageSize,
@@ -105,7 +108,17 @@ namespace Eazzy.V1.Controllers
                 SortBy = sortAndPaged.SortBy
             });
 
-            return Ok(new { data = model, totalCount = model.TotalCount });
+            var model = response.Select(x => new GetOrdersResponse()
+            {
+                CustomerId = x.CustomerId,
+                TaxService = x.TaxService,
+                CustomerName = x.CustomerName,
+                ImageUrl = _imageService.GetImageUrlByName(x.ImageUrl),
+                Items = x.Items,
+                OrderTotal = x.OrderTotal
+            }).ToList();
+
+            return Ok(new { data = model, totalCount = response.TotalCount });
         }
     }
 }

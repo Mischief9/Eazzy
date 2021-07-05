@@ -14,6 +14,8 @@ namespace Eazzy.Application.Models.Order
 
         public string CustomerName { get; set; }
 
+        public string ImageUrl { get; set; }
+
         public List<GetOrderItem> Items { get; set; }
     }
 

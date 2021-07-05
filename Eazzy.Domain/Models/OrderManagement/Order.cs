@@ -1,5 +1,6 @@
 ﻿using Eazzy.Domain.Models.CustomerManagement;
 using Eazzy.Domain.Models.OrderManagement.Enums;
+using Eazzy.Domain.Models.TenantManagement;
 using Eazzy.Shared.DomainCore;
 using System;
 using System.Collections.Generic;
@@ -27,5 +28,7 @@ namespace Eazzy.Domain.Models.OrderManagement
         public OrderStatus OrderStatus { get; set; }
 
         public int TenantId { get; set; }
+
+        public virtual Tenant Tenant { get; set; }
     }
 }

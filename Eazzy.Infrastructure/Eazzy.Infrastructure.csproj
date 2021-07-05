@@ -13,6 +13,10 @@
     <Compile Remove="Migrations\20210627121458_initCard.Designer.cs" />
     <Compile Remove="Migrations\20210630205421_paymentTransacion.cs" />
     <Compile Remove="Migrations\20210630205421_paymentTransacion.Designer.cs" />
+    <Compile Remove="Migrations\20210705185816_orderTenant.cs" />
+    <Compile Remove="Migrations\20210705185816_orderTenant.Designer.cs" />
+    <Compile Remove="Migrations\20210705191504_orderTenant.cs" />
+    <Compile Remove="Migrations\20210705191504_orderTenant.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

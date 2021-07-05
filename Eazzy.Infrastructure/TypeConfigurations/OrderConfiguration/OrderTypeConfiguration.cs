@@ -17,6 +17,12 @@ namespace Eazzy.Infrastructure.TypeConfigurations.OrderConfiguration
             builder.HasMany(x => x.OrderItems)
                 .WithOne(x => x.Order)
                 .HasForeignKey(x => x.OrderId);
+
+
+            builder.HasOne(x => x.Tenant)
+                .WithMany()
+                .HasForeignKey(x=>x.TenantId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
