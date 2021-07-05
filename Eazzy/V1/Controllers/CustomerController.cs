@@ -34,6 +34,7 @@ namespace Eazzy.V1.Controllers
             _customerService = customerService;
             _orderService = orderService;
             _roleService = roleService;
+            _imageService = imageService;
         }
 
         [HttpGet]
