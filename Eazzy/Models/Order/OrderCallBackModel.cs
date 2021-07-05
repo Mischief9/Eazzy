@@ -1,4 +1,5 @@
 ﻿using Eazzy.Domain.Models.OrderManagement.Enums;
+using Eazzy.Models.Payment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace Eazzy.Models.Order
         public string Status { get; set; }
 
         public int OrderId { get; set; }
+
+        public AddOrUpdatePaymentTransaction AddOrUpdatePaymentTransaction { get; set; }
 
         public OrderStatus GetStatus()
         {

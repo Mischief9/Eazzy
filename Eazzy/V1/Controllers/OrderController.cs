@@ -82,6 +82,25 @@ namespace Eazzy.V1.Controllers
             var status = model.GetStatus();
             _orderService.ChangeOrderStatus(status, order);
 
+            var paymentTransaction = _paymentService.FindById(model.AddOrUpdatePaymentTransaction.Id);
+
+            if (paymentTransaction == null)
+            {
+                return Fail(HttpStatusCode.NotFound, "Payment Transaction wasn't found.");
+            }
+
+            paymentTransaction.ExternalTransactionIdentifier = model.AddOrUpdatePaymentTransaction.ExternalTransactionIdentifier;
+            paymentTransaction.Status = model.AddOrUpdatePaymentTransaction.Status;
+            paymentTransaction.StatusCode = model.AddOrUpdatePaymentTransaction.StatusCode;
+            paymentTransaction.StatusDescription = model.AddOrUpdatePaymentTransaction.StatusDescription;
+            paymentTransaction.CardId = model.AddOrUpdatePaymentTransaction.CardId;
+            paymentTransaction.RawRequest = model.AddOrUpdatePaymentTransaction.RawRequest;
+            paymentTransaction.RawResponse = model.AddOrUpdatePaymentTransaction.RawResponse;
+            paymentTransaction.Type = model.AddOrUpdatePaymentTransaction.Type;
+            paymentTransaction.UpdateDateOnutc = DateTime.UtcNow;
+
+            _paymentService.UpdatePaymentTransaction(paymentTransaction);
+
             return NoContent();
         }
 
