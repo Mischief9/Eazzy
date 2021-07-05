@@ -20,7 +20,7 @@ namespace Eazzy.Infrastructure.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Tenant>().HasQueryFilter(x => !x.IsDeleted);
+            modelBuilder.Entity<Tenant>(); //.HasQueryFilter(x => !x.IsDeleted);
 
             modelBuilder.ApplyConfiguration(new UserTypeConfiguration());
             modelBuilder.ApplyConfiguration(new UserClaimTypeConfiguration());
